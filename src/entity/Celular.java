@@ -7,10 +7,12 @@ public class Celular implements Serializable {
 
 	//entidade fraca
 	
+	private Integer id;
 	private String numero;
 	
-	public Celular(String numero) {
+	public Celular(Integer id, String numero) {
 		this.numero = numero;
+		this.id = id;
 	}
 
 	public String getNumero() {
@@ -25,6 +27,15 @@ public class Celular implements Serializable {
 	public String toString() {
 		return "Número do Celular: " + numero;
 	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
 	
 	
 	

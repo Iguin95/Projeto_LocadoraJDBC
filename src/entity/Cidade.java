@@ -6,14 +6,17 @@ public class Cidade implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	private Integer id;
 	private Estado uf;
 	private String CEP;
 	private String nome;
 	
-	public Cidade(Estado uf, String CEP, String nome) {
+	
+	public Cidade(Integer id, Estado uf, String CEP, String nome) {
 		this.uf = uf;
 		this.CEP = CEP;
 		this.nome = nome;
+		this.id = id;
 	}
 
 	public Estado getUf() {
@@ -43,6 +46,13 @@ public class Cidade implements Serializable {
 	@Override
 	public String toString() {
 		return nome;
+	}
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 

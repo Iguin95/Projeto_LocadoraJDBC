@@ -6,7 +6,7 @@ public class Estado implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String nome;
+	private String nome; //Chave primária
 
 	public Estado(String nome) {
 		this.nome = nome;
