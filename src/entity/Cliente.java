@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.Objects;
 
 
@@ -10,7 +11,7 @@ public class Cliente implements Serializable {
 	
 	private String CPF; //chave primária
 	private String nome;
-	private Integer idade;
+	private Date idade;
 	private Endereco endereco;
 	private Celular celular;
 	
@@ -18,7 +19,7 @@ public class Cliente implements Serializable {
 	public Cliente() {
 	}
 
-	public Cliente(String cPF, String nome, Integer idade, Endereco endereco, Celular celular) {
+	public Cliente(String cPF, String nome, Date idade, Endereco endereco, Celular celular) {
 		CPF = cPF;
 		this.nome = nome;
 		this.idade = idade;
@@ -42,11 +43,11 @@ public class Cliente implements Serializable {
 		this.nome = nome;
 	}
 
-	public Integer getIdade() {
+	public Date getIdade() {
 		return idade;
 	}
 
-	public void setIdade(Integer idade) {
+	public void setIdade(Date idade) {
 		this.idade = idade;
 	}
 
@@ -89,12 +90,5 @@ public class Cliente implements Serializable {
 		return "Cliente -> [CPF = " + CPF + ", Nome = " + nome 
 				+ ", Idade = " + idade + "; " + endereco + celular + "]";
 	}
-	
-	
-	
-	
-	
-	
-	
 
 }

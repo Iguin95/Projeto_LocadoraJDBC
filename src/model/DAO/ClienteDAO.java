@@ -9,7 +9,8 @@ public interface ClienteDAO {
 	void inserir(Cliente obj);
 	void atualizar(Cliente obj);
 	void deletarPorId(Integer id);
-	Cliente encontrarPorId(Integer id);
+	Cliente encontrarPorCPF(String cpf);
 	List<Cliente> acharTodos();
+	
 
 }
