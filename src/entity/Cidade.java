@@ -11,6 +11,9 @@ public class Cidade implements Serializable {
 	private String CEP;
 	private String nome;
 	
+	public Cidade() {
+		
+	}
 	
 	public Cidade(Integer id, Estado uf, String CEP, String nome) {
 		this.uf = uf;

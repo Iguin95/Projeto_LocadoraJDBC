@@ -10,6 +10,9 @@ public class Celular implements Serializable {
 	private Integer id;
 	private String numero;
 	
+	public Celular() {
+	}
+	
 	public Celular(Integer id, String numero) {
 		this.numero = numero;
 		this.id = id;

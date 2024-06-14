@@ -8,7 +8,11 @@ import java.util.List;
 
 import data_base.ConexaoDB;
 import data_base.ExcecaoDataBase;
+import entity.Celular;
+import entity.Cidade;
 import entity.Cliente;
+import entity.Endereco;
+import entity.Estado;
 import model.DAO.ClienteDAO;
 
 public class ClienteDAO_JDBC implements ClienteDAO{
@@ -44,17 +48,43 @@ public class ClienteDAO_JDBC implements ClienteDAO{
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement(
-					"SELECT * FROM locadora.cliente "
-					+ "where CPF = ? ");
+					"select cliente.CPF, cliente.nome, cliente.idade, celular.numeroCelular, " 
+					+ "endereco.rua, endereco.numeroCasa, endereco.complemento, " 
+					+ "cidade.nome, cidade.cep, estado.nome "
+					+ "from cliente join endereco on endereco.id = cliente.endereco_cliente "
+					+ "join cidade join celular join estado "
+					+ "where CPF = ?");
+			
 			ps.setString(1, cpf);
 			rs = ps.executeQuery();
 			if(rs.next()) {
+				Estado est = new Estado();
+				est.setNome(rs.getString("estado.nome"));
+						
+				Cidade cid = new Cidade();
+				cid.setNome(rs.getString("cidade.nome"));
+				cid.setCEP(rs.getString("cidade.cep"));
+				
+				
+				Celular cell = new Celular();
+				cell.setNumero(rs.getString("celular.numeroCelular"));
+				
+				Endereco end = new Endereco();
+				//end.setId(rs.getInt("endereco.id")); //erro na hora de resgatar o id
+				end.setRua(rs.getString("endereco.rua"));
+				end.setNumero(rs.getString("endereco.numeroCasa"));
+				end.setLogradouro(rs.getString("endereco.complemento"));
+				
 				Cliente obj = new Cliente();
 				obj.setCPF(rs.getString("CPF"));
 				obj.setNome(rs.getString("nome"));
-				//obj.setCelular(rs.getString("celular"));
 				obj.setIdade(rs.getDate("idade"));
-				//obj.setEndereco(rs.getString(""));
+				
+				cid.setUf(est);
+				end.setCidade(cid);
+				obj.setCelular(cell);
+				obj.setEndereco(end);
+				
 				
 				return obj;
 			}

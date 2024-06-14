@@ -20,17 +20,6 @@ public class Program {
 		
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
-		/*DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		Date date = new Date(04/03/2000);
-		
-		Estado est = new Estado("São Paulo");
-		Cidade cid = new Cidade(null, est, "3200000", "São Paulo");
-		Endereco end = new Endereco(null, cid, "Prof Ginica", "788", "Ap");
-		Celular cel = new Celular(null, "3199999999");
-		
-		Cliente cliente = new Cliente("12345678911", "Igor",date , end, cel);
-		
-		System.out.println(cliente);*/
 		
 		ClienteDAO clienteDao = FabricaDAO.criarClienteDAO();
 
