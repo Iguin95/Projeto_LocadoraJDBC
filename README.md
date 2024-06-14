@@ -1,5 +1,5 @@
 # Projeto_LocadoraJDBC
-Projeto da Locadora refeito para contempar a biblioteca JDBC.
+Projeto da Locadora refeito para contemplar a biblioteca JDBC.
 Programa que estou desenvolvendo para testar e aprimorar meus conhecimento até então adquiridos em Java - Da primeira seção do curso até a seção 21.
 
 Programa Desafio:
