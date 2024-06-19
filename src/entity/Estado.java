@@ -6,15 +6,25 @@ public class Estado implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String nome; //Chave primária
+	private Integer id;
+	private String nome; 
 	
 	public Estado() {
 	}
 
-	public Estado(String nome) {
+	public Estado(String nome,Integer id) {
 		this.nome = nome;
+		this.id = id;
 	}
 	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public String getNome() {
 		return nome;
 	}

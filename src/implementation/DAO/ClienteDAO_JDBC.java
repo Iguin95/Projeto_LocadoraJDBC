@@ -48,21 +48,26 @@ public class ClienteDAO_JDBC implements ClienteDAO{
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement(
-					"select cliente.CPF, cliente.nome, cliente.idade, celular.numeroCelular, " 
-					+ "endereco.rua, endereco.numeroCasa, endereco.complemento, " 
-					+ "cidade.nome, cidade.cep, estado.nome "
+					"select cliente.CPF, cliente.nome, cliente.idade, "
+					+ "endereco.rua, endereco.numeroCasa, endereco.complemento, "
+					+ "celular.numeroCelular, "
+					+ "cidade.nome_cidade, cidade.cep, "
+					+ "estado.nome_estado "
 					+ "from cliente join endereco on endereco.id = cliente.endereco_cliente "
-					+ "join cidade join celular join estado "
+					+ "join celular on celular.id = cliente.celular_cliente "
+					+ "join cidade on cidade.id = endereco.id_Cidade "
+					+ "join estado on estado.id = cidade.estado_da_cidade "
 					+ "where CPF = ?");
 			
 			ps.setString(1, cpf);
 			rs = ps.executeQuery();
+			
 			if(rs.next()) {
 				Estado est = new Estado();
-				est.setNome(rs.getString("estado.nome"));
+				est.setNome(rs.getString("estado.nome_estado"));
 						
 				Cidade cid = new Cidade();
-				cid.setNome(rs.getString("cidade.nome"));
+				cid.setNome(rs.getString("cidade.nome_cidade"));
 				cid.setCEP(rs.getString("cidade.cep"));
 				
 				

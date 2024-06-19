@@ -46,10 +46,7 @@ public class Cidade implements Serializable {
 		this.nome = nome;
 	}
 
-	@Override
-	public String toString() {
-		return nome;
-	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -58,7 +55,8 @@ public class Cidade implements Serializable {
 		this.id = id;
 	}
 
-
-	
-
+	@Override
+	public String toString() {
+		return nome + "(Estado = " + uf.getNome() + ")";
+	}
 }
