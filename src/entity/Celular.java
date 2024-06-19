@@ -26,11 +26,6 @@ public class Celular implements Serializable {
 		this.numero = numero;
 	}
 
-	@Override
-	public String toString() {
-		return "Número do Celular: " + numero;
-	}
-
 	public Integer getId() {
 		return id;
 	}
@@ -39,7 +34,11 @@ public class Celular implements Serializable {
 		this.id = id;
 	}
 	
-	
+
+	@Override
+	public String toString() {
+		return " - Número do Celular: " + numero;
+	}
 	
 	
 }

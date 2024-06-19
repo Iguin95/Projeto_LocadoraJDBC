@@ -57,6 +57,7 @@ public class Cidade implements Serializable {
 
 	@Override
 	public String toString() {
-		return nome + "(Estado = " + uf.getNome() + ")";
+		return "Cidade = " + nome + " - CEP: " + CEP
+				+ "(Estado = " + uf.getNome() + ")";
 	}
 }

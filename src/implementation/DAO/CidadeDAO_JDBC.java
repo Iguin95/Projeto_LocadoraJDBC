@@ -9,26 +9,25 @@ import java.util.List;
 import data_base.ConexaoDB;
 import data_base.ExcecaoDataBase;
 import entity.Cidade;
-import entity.Endereco;
 import entity.Estado;
-import model.DAO.EnderecoDAO;
+import model.DAO.CidadeDAO;
 
-public class EnderecoDAO_JDBC implements EnderecoDAO{
+public class CidadeDAO_JDBC implements CidadeDAO{
 	
-	private Connection conn;
+	Connection conn = null;
 	
-	public EnderecoDAO_JDBC(Connection conn) {
+	public CidadeDAO_JDBC (Connection conn) {
 		this.conn = conn;
 	}
 
 	@Override
-	public void inserir(Endereco obj) {
+	public void inserir(Cidade obj) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void atualizar(Endereco obj) {
+	public void atualizar(Cidade obj) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -40,38 +39,30 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 	}
 
 	@Override
-	public Endereco encontrarPorId(Integer id) {
+	public Cidade encontrarPorId(Integer id) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement(
-					"select endereco.id, endereco.rua, endereco.bairro, endereco.numeroCasa, endereco.complemento, " 
-					+ "cidade.nome_cidade, cidade.cep, estado.nome_estado "
-					+ "from endereco join cidade on cidade.id = endereco.id_Cidade "
-					+ "join estado on estado.id = cidade.estado_da_cidade "
-					+ "where endereco.id = ?");
-			
+					"select cidade.nome_cidade, cidade.cep, " 
+					+ "estado.nome_estado "
+					+ "from cidade join estado on estado.id = cidade.estado_da_cidade "
+					+ "where cidade.id = ?"
+					);
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				Endereco end = new Endereco();
-				end.setRua(rs.getString("endereco.rua"));
-				end.setBairro(rs.getString("endereco.bairro"));
-				end.setNumero(rs.getString("endereco.numeroCasa"));
-				end.setComplemento(rs.getString("endereco.complemento"));
-
+				Estado est = new Estado();
+				est.setNome(rs.getString("estado.nome_estado"));
+				
 				Cidade cid = new Cidade();
 				cid.setNome(rs.getString("cidade.nome_cidade"));
 				cid.setCEP(rs.getString("cidade.cep"));
 				
-				Estado est = new Estado();
-				est.setNome(rs.getString("estado.nome_estado"));
-				
 				cid.setUf(est);
-				end.setCidade(cid);
 				
-				return end;
+				return cid;
 			}
 			return null;
 		}catch(SQLException e) {
@@ -80,11 +71,10 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 			ConexaoDB.FecharStatement(ps);
 			ConexaoDB.FecharResultSet(rs);
 		}
-		
 	}
 
 	@Override
-	public List<Endereco> acharTodos() {
+	public List<Cidade> acharTodos() {
 		// TODO Auto-generated method stub
 		return null;
 	}
