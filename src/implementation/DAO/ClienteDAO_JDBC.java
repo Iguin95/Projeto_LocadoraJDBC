@@ -49,7 +49,7 @@ public class ClienteDAO_JDBC implements ClienteDAO{
 		try {
 			ps = conn.prepareStatement(
 					"select cliente.CPF, cliente.nome, cliente.idade, "
-					+ "endereco.rua, endereco.numeroCasa, endereco.complemento, "
+					+ "endereco.rua, endereco.bairro, endereco.numeroCasa, endereco.complemento, "
 					+ "celular.numeroCelular, "
 					+ "cidade.nome_cidade, cidade.cep, "
 					+ "estado.nome_estado "
@@ -75,10 +75,10 @@ public class ClienteDAO_JDBC implements ClienteDAO{
 				cell.setNumero(rs.getString("celular.numeroCelular"));
 				
 				Endereco end = new Endereco();
-				//end.setId(rs.getInt("endereco.id")); //erro na hora de resgatar o id
 				end.setRua(rs.getString("endereco.rua"));
+				end.setBairro(rs.getString("endereco.bairro"));
 				end.setNumero(rs.getString("endereco.numeroCasa"));
-				end.setLogradouro(rs.getString("endereco.complemento"));
+				end.setComplemento(rs.getString("endereco.complemento"));
 				
 				Cliente obj = new Cliente();
 				obj.setCPF(rs.getString("CPF"));
