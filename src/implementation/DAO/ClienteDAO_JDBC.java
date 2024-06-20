@@ -63,35 +63,15 @@ public class ClienteDAO_JDBC implements ClienteDAO{
 			rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				Estado est = new Estado();
-				est.setNome(rs.getString("estado.nome_estado"));
-						
-				Cidade cid = new Cidade();
-				cid.setNome(rs.getString("cidade.nome_cidade"));
-				cid.setCEP(rs.getString("cidade.cep"));
 				
-				
-				Celular cell = new Celular();
-				cell.setNumero(rs.getString("celular.numeroCelular"));
-				
-				Endereco end = new Endereco();
-				end.setRua(rs.getString("endereco.rua"));
-				end.setBairro(rs.getString("endereco.bairro"));
-				end.setNumero(rs.getString("endereco.numeroCasa"));
-				end.setComplemento(rs.getString("endereco.complemento"));
-				
-				Cliente obj = new Cliente();
-				obj.setCPF(rs.getString("CPF"));
-				obj.setNome(rs.getString("nome"));
-				obj.setIdade(rs.getDate("idade"));
-				
-				cid.setUf(est);
-				end.setCidade(cid);
-				obj.setCelular(cell);
-				obj.setEndereco(end);
-				
+				Estado est = instanciandoEstado(rs);
+				Celular cell = instanciandoCelular(rs);
+				Cidade cid = instanciandoCidade(rs, est);
+				Endereco end = instanciandoEndereco(rs, cid);
+				Cliente obj = instanciandoCliente(rs, cell, end);
 				
 				return obj;
+				
 			}
 			return null;			
 		}catch(SQLException e) {
@@ -102,6 +82,7 @@ public class ClienteDAO_JDBC implements ClienteDAO{
 			ConexaoDB.FecharResultSet(rs);
 		}
 	}
+	
 
 	@Override
 	public List<Cliente> acharTodos() {
@@ -122,6 +103,53 @@ public class ClienteDAO_JDBC implements ClienteDAO{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	//Funções para reutilização de instanciações
+	private Estado instanciandoEstado(ResultSet rs) throws SQLException {
+		Estado est = new Estado();
+		est.setNome(rs.getString("estado.nome_estado"));
+		
+		return est;
+	}
+	
+	private Cidade instanciandoCidade(ResultSet rs, Estado est) throws SQLException{
+		Cidade cid = new Cidade();
+		cid.setNome(rs.getString("cidade.nome_cidade"));
+		cid.setCEP(rs.getString("cidade.cep"));
+		cid.setUf(est);
+		
+		return cid;
+	}
+	
+	private Endereco instanciandoEndereco(ResultSet rs, Cidade cid) throws SQLException{
+		Endereco end = new Endereco();
+		end.setRua(rs.getString("endereco.rua"));
+		end.setBairro(rs.getString("endereco.bairro"));
+		end.setNumero(rs.getString("endereco.numeroCasa"));
+		end.setComplemento(rs.getString("endereco.complemento"));
+		end.setCidade(cid);
+		
+		return end;
+	}
+	
+	private Celular instanciandoCelular(ResultSet rs) throws SQLException{
+		Celular cell = new Celular();
+		cell.setNumero(rs.getString("celular.numeroCelular"));
+		
+		return cell;	
+	}
+	
+	private Cliente instanciandoCliente(ResultSet rs, Celular cell, Endereco end) throws SQLException{
+		Cliente obj = new Cliente();
+		obj.setCPF(rs.getString("CPF"));
+		obj.setNome(rs.getString("nome"));
+		obj.setIdade(rs.getDate("idade"));
+		
+		obj.setCelular(cell);
+		obj.setEndereco(end);
+		
+		return obj;
+	}
+	
 	
 }
