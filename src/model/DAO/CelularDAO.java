@@ -1,7 +1,6 @@
 package model.DAO;
 
 import java.util.List;
-
 import entity.Celular;
 
 public interface CelularDAO {

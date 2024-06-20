@@ -11,9 +11,11 @@ import entity.Cliente;
 import entity.Endereco;
 import entity.Estado;
 import implementation.DAO.ClienteDAO_JDBC;
+import model.DAO.CelularDAO;
 import model.DAO.CidadeDAO;
 import model.DAO.ClienteDAO;
 import model.DAO.EnderecoDAO;
+import model.DAO.EstadoDAO;
 import model.DAO.FabricaDAO;
 
 public class Program {
@@ -34,11 +36,27 @@ public class Program {
 		Endereco end = enderecoDao.encontrarPorId(9);
 		System.out.println(end);
 		
-		
+		System.out.println();
 		System.out.println("----Teste Cidade----");
 		CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
 		Cidade cid = cidadeDao.encontrarPorId(3);
 		System.out.println(cid);
+		
+		
+		System.out.println();
+		System.out.println("----Teste Estado----");
+		EstadoDAO estadoDao = FabricaDAO.criarEstadoDAO();
+		Estado est = estadoDao.encontrarPorId(4);
+		System.out.println(est);
+		
+		
+		System.out.println();
+		System.out.println("----Teste Celular----");
+		CelularDAO celularDao = FabricaDAO.criarCelularDAO();
+		Celular cel = celularDao.encontrarPorId(1);
+		System.out.println(cel.retornoCelularCliente());
+		
+		
 		
 		sc.close();
 	}

@@ -109,5 +109,19 @@ public class ClienteDAO_JDBC implements ClienteDAO{
 		return null;
 	}
 
+
+	@Override
+	public Cliente encontrarClienteComFilme(String cpf) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Cliente> acharTodosClientesComFilmes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }

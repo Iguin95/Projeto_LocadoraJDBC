@@ -10,6 +10,8 @@ public class Celular implements Serializable {
 	private Integer id;
 	private String numero;
 	
+	private Cliente cliente;
+	
 	public Celular() {
 	}
 	
@@ -34,11 +36,21 @@ public class Celular implements Serializable {
 		this.id = id;
 	}
 	
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
 
 	@Override
 	public String toString() {
-		return " - Número do Celular: " + numero;
+		return "- Número do Celular: " + numero;
 	}
 	
-	
+	public String retornoCelularCliente() {
+		return "- Número do Celular: " + numero 
+				+ " - Cliente: " + cliente.getNome();
+	}
 }

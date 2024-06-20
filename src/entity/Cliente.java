@@ -87,8 +87,9 @@ public class Cliente implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Cliente -> [CPF = " + CPF + ", Nome = " + nome 
-				+ ", Idade = " + idade + "; " + endereco + celular + "]";
+		return "Cliente -> CPF: " + CPF + "\nNome: " + nome 
+				+ ";\nIdade: " + idade + "; \n\n" + endereco + "\n" + celular + "\n"
+				+ "________________________ \n";
 	}
 
 }
