@@ -11,15 +11,17 @@ public class Filme implements Serializable {
 	private Integer classificacao;
 	private String nome;
 	private Double preco;
+	private Integer ano;
 	
 	public Filme() {
 	}
 	
-	public Filme(Integer classificacao, String nome, Double preco, Integer id) {
+	public Filme(Integer classificacao, String nome,Integer ano, Double preco, Integer id) {
 		this.classificacao = classificacao;
 		this.nome = nome;
 		this.preco = preco;
 		this.id = id;
+		this.ano = ano;
 	}
 
 	public Integer getClassificacao() {
@@ -54,6 +56,14 @@ public class Filme implements Serializable {
 		this.id = id;
 	}
 
+	public Integer getAno() {
+		return ano;
+	}
+
+	public void setAno(Integer ano) {
+		this.ano = ano;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -69,6 +79,12 @@ public class Filme implements Serializable {
 			return false;
 		Filme other = (Filme) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		return "Filme: " + nome + " - Classificação indicativa: " + classificacao + " anos"
+				+"\nAno de Lançamento: " + ano + "\nPreço: " + String.format("%.2f", preco);
 	}
 	
 

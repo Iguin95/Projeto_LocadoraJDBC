@@ -10,6 +10,7 @@ import entity.Cidade;
 import entity.Cliente;
 import entity.Endereco;
 import entity.Estado;
+import entity.Filme;
 import implementation.DAO.ClienteDAO_JDBC;
 import model.DAO.CelularDAO;
 import model.DAO.CidadeDAO;
@@ -17,6 +18,7 @@ import model.DAO.ClienteDAO;
 import model.DAO.EnderecoDAO;
 import model.DAO.EstadoDAO;
 import model.DAO.FabricaDAO;
+import model.DAO.FilmeDAO;
 
 public class Program {
 
@@ -55,6 +57,14 @@ public class Program {
 		CelularDAO celularDao = FabricaDAO.criarCelularDAO();
 		Celular cel = celularDao.encontrarPorId(1);
 		System.out.println(cel.retornoCelularCliente());
+		
+		
+		
+		System.out.println();
+		System.out.println("----Teste Filme----");
+		FilmeDAO filmeDao = FabricaDAO.criarFilmeDAO();
+		Filme filme = filmeDao.encontrarPorId(3);
+		System.out.println(filme);
 		
 		
 		

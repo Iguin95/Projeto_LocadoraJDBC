@@ -6,6 +6,7 @@ import implementation.DAO.CidadeDAO_JDBC;
 import implementation.DAO.ClienteDAO_JDBC;
 import implementation.DAO.EnderecoDAO_JDBC;
 import implementation.DAO.EstadoDAO_JDBC;
+import implementation.DAO.FilmeDAO_JDBC;
 
 public class FabricaDAO {
 	
@@ -13,9 +14,9 @@ public class FabricaDAO {
 		return new ClienteDAO_JDBC(ConexaoDB.Conectar());
 	}
 	
-	/*public static FilmeDAO criarFilmeDAO() {
-		return new FilmeDAO_JDBC();
-	}*/
+	public static FilmeDAO criarFilmeDAO() {
+		return new FilmeDAO_JDBC(ConexaoDB.Conectar());
+	}
 	
 	public static EnderecoDAO criarEnderecoDAO() {
 		return new EnderecoDAO_JDBC(ConexaoDB.Conectar());

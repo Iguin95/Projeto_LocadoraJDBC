@@ -90,19 +90,7 @@ public class ClienteDAO_JDBC implements ClienteDAO{
 		return null;
 	}
 
-
-	@Override
-	public Cliente encontrarClienteComFilme(String cpf) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public List<Cliente> acharTodosClientesComFilmes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 	
 	//Funções para reutilização de instanciações
 	private Estado instanciandoEstado(ResultSet rs) throws SQLException {
@@ -150,6 +138,6 @@ public class ClienteDAO_JDBC implements ClienteDAO{
 		
 		return obj;
 	}
-	
+
 	
 }
