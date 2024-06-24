@@ -46,8 +46,8 @@ public class FilmeDAO_JDBC implements FilmeDAO{
 			ps = conn.prepareStatement(
 					"select filme.nome_filme, filme.classificacao, filme.ano, filme.preco "
 					+ "from filme "
-					+ "where filme.id = ?")
-					;
+					+ "where filme.id = ?");
+					
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
 			

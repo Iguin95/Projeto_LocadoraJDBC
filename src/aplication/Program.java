@@ -8,6 +8,7 @@ import java.util.Scanner;
 import entity.Celular;
 import entity.Cidade;
 import entity.Cliente;
+import entity.ClienteFilme;
 import entity.Endereco;
 import entity.Estado;
 import entity.Filme;
@@ -15,6 +16,7 @@ import implementation.DAO.ClienteDAO_JDBC;
 import model.DAO.CelularDAO;
 import model.DAO.CidadeDAO;
 import model.DAO.ClienteDAO;
+import model.DAO.Cliente_FilmeDAO;
 import model.DAO.EnderecoDAO;
 import model.DAO.EstadoDAO;
 import model.DAO.FabricaDAO;
@@ -66,6 +68,13 @@ public class Program {
 		Filme filme = filmeDao.encontrarPorId(3);
 		System.out.println(filme);
 		
+		
+		
+		System.out.println();
+		System.out.println("----Teste Cliente com filme----");
+		Cliente_FilmeDAO cliFilDao = FabricaDAO.criarClienteFilmeDAO();
+		ClienteFilme cf = cliFilDao.encontrarClienteComFilme("15684310664");
+		System.out.println(cf);
 		
 		
 		sc.close();
