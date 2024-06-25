@@ -121,6 +121,7 @@ public class ClienteFilme implements Serializable{
 		   StringBuilder sb = new StringBuilder();
 	        sb.append("Cliente: ").append(cliente.getNome()).append("\n");
 	        sb.append("Filmes:\n");
+	        
 	        for (Filme filme : listaFilmeCliente) {
 	            sb.append(filme.getNome()).append("\n");
 	        }

@@ -8,7 +8,7 @@ import entity.Filme;
 
 public interface Cliente_FilmeDAO {
 	
-	ClienteFilme encontrarClienteComFilme(String cpf);
+	List<ClienteFilme> encontrarClienteComFilme(String cpf);
 	List<Cliente> acharTodosClientesComFilmes();
 	List<Cliente> acharClientesPorFilme(Filme filme);
 
