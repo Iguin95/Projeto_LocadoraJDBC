@@ -55,18 +55,11 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 			rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				Endereco end = new Endereco();
-				end.setRua(rs.getString("endereco.rua"));
-				end.setBairro(rs.getString("endereco.bairro"));
-				end.setNumero(rs.getString("endereco.numeroCasa"));
-				end.setComplemento(rs.getString("endereco.complemento"));
-
-				Cidade cid = new Cidade();
-				cid.setNome(rs.getString("cidade.nome_cidade"));
-				cid.setCEP(rs.getString("cidade.cep"));
+				Endereco end = instanciandoEndereco(rs);
 				
-				Estado est = new Estado();
-				est.setNome(rs.getString("estado.nome_estado"));
+				Cidade cid = instanciandoCidade(rs);
+				
+				Estado est = instanciandoEstado(rs);
 				
 				cid.setUf(est);
 				end.setCidade(cid);
@@ -87,6 +80,28 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 	public List<Endereco> acharTodos() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private Endereco instanciandoEndereco(ResultSet rs) throws SQLException {
+		Endereco end = new Endereco();
+		end.setRua(rs.getString("endereco.rua"));
+		end.setBairro(rs.getString("endereco.bairro"));
+		end.setNumero(rs.getString("endereco.numeroCasa"));
+		end.setComplemento(rs.getString("endereco.complemento"));
+		return end;
+	}
+	
+	private Cidade instanciandoCidade(ResultSet rs) throws SQLException {
+		Cidade cid = new Cidade();
+		cid.setNome(rs.getString("cidade.nome_cidade"));
+		cid.setCEP(rs.getString("cidade.cep"));
+		return cid;
+	}
+
+	private Estado instanciandoEstado(ResultSet rs) throws SQLException {
+		Estado est = new Estado();
+		est.setNome(rs.getString("estado.nome_estado"));
+		return est;
 	}
 
 }

@@ -52,12 +52,8 @@ public class FilmeDAO_JDBC implements FilmeDAO{
 			rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				Filme filme = new Filme();
-				filme.setNome(rs.getString("filme.nome_filme"));
-				filme.setClassificacao(rs.getInt("filme.classificacao"));
-				filme.setAno(rs.getInt("filme.ano"));
-				filme.setPreco(rs.getDouble("filme.preco"));
-				
+				Filme filme = instanciandoFilme(rs);
+								
 				return filme;
 			}
 			return null;
@@ -80,6 +76,15 @@ public class FilmeDAO_JDBC implements FilmeDAO{
 	public List<Filme> acharFilmeComCliente(Cliente cliente) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private Filme instanciandoFilme(ResultSet rs) throws SQLException {
+		Filme filme = new Filme();
+		filme.setNome(rs.getString("filme.nome_filme"));
+		filme.setClassificacao(rs.getInt("filme.classificacao"));
+		filme.setAno(rs.getInt("filme.ano"));
+		filme.setPreco(rs.getDouble("filme.preco"));
+		return filme;
 	}
 
 }

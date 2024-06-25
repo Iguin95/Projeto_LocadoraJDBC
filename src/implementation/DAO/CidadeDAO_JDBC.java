@@ -53,13 +53,10 @@ public class CidadeDAO_JDBC implements CidadeDAO{
 			rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				Estado est = new Estado();
-				est.setNome(rs.getString("estado.nome_estado"));
-				
-				Cidade cid = new Cidade();
-				cid.setNome(rs.getString("cidade.nome_cidade"));
-				cid.setCEP(rs.getString("cidade.cep"));
-				
+				Estado est = instanciandoEstado(rs);
+								
+				Cidade cid = instanciandocidade(rs, est);
+								
 				cid.setUf(est);
 				
 				return cid;
@@ -79,4 +76,17 @@ public class CidadeDAO_JDBC implements CidadeDAO{
 		return null;
 	}
 
+	private Estado instanciandoEstado(ResultSet rs) throws SQLException {
+		Estado est = new Estado();
+		est.setNome(rs.getString("estado.nome_estado"));
+		return est;
+	}
+	
+	private Cidade instanciandocidade(ResultSet rs, Estado est) throws SQLException {
+		Cidade cid = new Cidade();
+		cid.setNome(rs.getString("cidade.nome_cidade"));
+		cid.setCEP(rs.getString("cidade.cep"));
+		cid.setUf(est);
+		return cid;
+	}
 }

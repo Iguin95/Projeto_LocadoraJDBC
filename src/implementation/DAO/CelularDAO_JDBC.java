@@ -52,13 +52,9 @@ public class CelularDAO_JDBC implements CelularDAO{
 			rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				Cliente cli = new Cliente();
-				cli.setNome(rs.getString("cliente.nome"));
+				Cliente cli = instanciandoCliente(rs);
 				
-				Celular cel = new Celular();
-				cel.setNumero(rs.getString("celular.numeroCelular"));
-				
-				cel.setCliente(cli);
+				Celular cel = instanciandoCelular(rs, cli);
 				
 				return cel;
 			}
@@ -75,6 +71,19 @@ public class CelularDAO_JDBC implements CelularDAO{
 	public List<Celular> acharTodos() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private Cliente instanciandoCliente(ResultSet rs) throws SQLException {
+		Cliente cli = new Cliente();
+		cli.setNome(rs.getString("cliente.nome"));
+		return cli;
+	}
+	
+	private Celular instanciandoCelular(ResultSet rs, Cliente cli) throws SQLException {
+		Celular cel = new Celular();
+		cel.setNumero(rs.getString("celular.numeroCelular"));
+		cel.setCliente(cli);
+		return cel;
 	}
 
 }

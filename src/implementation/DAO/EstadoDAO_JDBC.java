@@ -51,8 +51,7 @@ public class EstadoDAO_JDBC implements EstadoDAO{
 			rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				Estado est = new Estado();
-				est.setNome(rs.getString("estado.nome_estado"));
+				Estado est = instanciandoEstado(rs);
 				
 				return est;
 			}
@@ -71,4 +70,9 @@ public class EstadoDAO_JDBC implements EstadoDAO{
 		return null;
 	}
 
+	private Estado instanciandoEstado(ResultSet rs) throws SQLException {
+		Estado est = new Estado();
+		est.setNome(rs.getString("estado.nome_estado"));
+		return est;
+	}
 }
