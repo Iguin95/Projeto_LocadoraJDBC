@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import data_base.ConexaoDB;
@@ -69,9 +70,35 @@ public class CelularDAO_JDBC implements CelularDAO{
 
 	@Override
 	public List<Celular> acharTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"select celular.*, celular.numeroCelular, cliente.nome "
+					+ "from cliente join celular on celular.id = cliente.celular_cliente "
+					+ "order by cliente.nome"
+					);
+			
+			rs = ps.executeQuery();
+			List<Celular> list = new ArrayList<>();
+			
+			while(rs.next()) {
+				Cliente cli = instanciandoCliente(rs);
+				
+				Celular cel = instanciandoCelular(rs, cli);
+				
+				list.add(cel);
+				
+			}
+			return list;
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
 	}
+
 	
 	private Cliente instanciandoCliente(ResultSet rs) throws SQLException {
 		Cliente cli = new Cliente();

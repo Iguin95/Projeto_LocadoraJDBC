@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import data_base.ConexaoDB;
@@ -72,8 +73,35 @@ public class CidadeDAO_JDBC implements CidadeDAO{
 
 	@Override
 	public List<Cidade> acharTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"select cidade.*, cidade.nome_cidade, cidade.cep, " 
+					+ "estado.nome_estado "
+					+ "from cidade join estado on estado.id = cidade.estado_da_cidade "
+					+ "order by cidade.nome_cidade"
+					);
+			
+			rs = ps.executeQuery();
+			List<Cidade> list = new ArrayList<>();
+			
+			while(rs.next()) {
+				Estado est = instanciandoEstado(rs);
+								
+				Cidade cid = instanciandocidade(rs, est);
+								
+				cid.setUf(est);
+				
+				list.add(cid);
+			}
+			return list;
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
 	}
 
 	private Estado instanciandoEstado(ResultSet rs) throws SQLException {

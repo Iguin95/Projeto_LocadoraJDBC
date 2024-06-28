@@ -40,9 +40,11 @@ public class Program {
 		System.out.println();
 		System.out.println("----Teste Cidade----");
 		CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
-		Cidade cid = cidadeDao.encontrarPorId(3);
-		System.out.println(cid);
-
+		List<Cidade> cid = cidadeDao.acharTodos();
+		for (Cidade cidade : cid) {
+			System.out.println(cidade);
+		}
+		
 		System.out.println();
 		System.out.println("----Teste Estado----");
 		EstadoDAO estadoDao = FabricaDAO.criarEstadoDAO();
@@ -52,8 +54,11 @@ public class Program {
 		System.out.println();
 		System.out.println("----Teste Celular----");
 		CelularDAO celularDao = FabricaDAO.criarCelularDAO();
-		Celular cel = celularDao.encontrarPorId(1);
-		System.out.println(cel.retornoCelularCliente());
+		List<Celular> cel = celularDao.acharTodos();
+		for (Celular celular : cel) {
+			System.out.println(celular.retornoCelularCliente());
+		}
+		
 
 		System.out.println();
 		System.out.println("----Teste Filme----");
@@ -64,10 +69,10 @@ public class Program {
 		System.out.println();
 		System.out.println("----Teste Cliente com filme----");
 		Cliente_FilmeDAO cliFilDao = FabricaDAO.criarClienteFilmeDAO();
-		List<ClienteFilme> clientesFilmes = cliFilDao.encontrarClienteComFilme("15684310664");
+		List<Cliente> clientesFilmes = cliFilDao.acharTodosClientesComFilmes();
 
-		for (ClienteFilme clienteFilme : clientesFilmes) {
-			System.out.println(clienteFilme);
+		for (Cliente todosClienteFilmes : clientesFilmes) {
+			System.out.println(todosClienteFilmes);
 		}
 
 		sc.close();

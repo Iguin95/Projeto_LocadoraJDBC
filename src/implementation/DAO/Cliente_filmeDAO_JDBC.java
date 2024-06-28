@@ -72,9 +72,9 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO{
                 clienteFilme.getListaFilmeCliente().add(filme);
             }
 
-            return new ArrayList<>(clienteFilmeMap.values()); /*Após processar todas as linhas do ResultSet, 
-             												    retorna uma nova lista (ArrayList) contendo 
-             												    todos os valores do Map, ou seja, todos os objetos ClienteFilme.*/
+            return new ArrayList<>(clienteFilmeMap.values());
+            /*Após processar todas as linhas do ResultSet, retorna uma nova lista (ArrayList) 
+             * contendo todos os valores do Map, ou seja, todos os objetos ClienteFilme.*/
             
 		}catch(SQLException e) {
 			throw new ExcecaoDataBase(e.getMessage());
@@ -92,8 +92,34 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO{
 
 	@Override
 	public List<Cliente> acharTodosClientesComFilmes() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"select cliente.*, cliente.nome, cliente.cpf "
+					+ "from cliente join filme_cliente on cliente.cpf = filme_cliente.idCliente "
+					+ "join filme on filme.id = filme_cliente.idFilme "
+					+ "order by cliente.nome"
+					);
+			
+			rs = ps.executeQuery();
+			
+            List<Cliente> list = new ArrayList<>();
+            
+            while (rs.next()) { 
+            	Cliente cliente = instanciandoCliente(rs);
+            	
+            	list.add(cliente);               
+            }
+
+            return list;
+            
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
 	}
 
 	@Override
