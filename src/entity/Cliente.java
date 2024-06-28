@@ -68,6 +68,9 @@ public class Cliente implements Serializable {
 	}
 
 	
+	/* Equals e HashCode é necessário para que o SET verifique corretamente
+	se há duplicatas*/
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(CPF);
@@ -92,4 +95,9 @@ public class Cliente implements Serializable {
 				+ "________________________ \n";
 	}
 
+	public String clienteFilmeString() {
+		return "Cliente: " + nome 
+				+ " - CPF: " + CPF 
+				+"\n";
+	}
 }

@@ -6,8 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import data_base.ConexaoDB;
 import data_base.ExcecaoDataBase;
@@ -91,28 +93,27 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO{
 
 
 	@Override
-	public List<Cliente> acharTodosClientesComFilmes() {
+	public Set<Cliente> acharTodosClientesComFilmes() {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement(
 					"select cliente.*, cliente.nome, cliente.cpf "
 					+ "from cliente join filme_cliente on cliente.cpf = filme_cliente.idCliente "
-					+ "join filme on filme.id = filme_cliente.idFilme "
 					+ "order by cliente.nome"
 					);
 			
 			rs = ps.executeQuery();
 			
-            List<Cliente> list = new ArrayList<>();
+            Set<Cliente> set = new HashSet<>();
             
             while (rs.next()) { 
             	Cliente cliente = instanciandoCliente(rs);
             	
-            	list.add(cliente);               
+            	set.add(cliente);               
             }
 
-            return list;
+            return set;
             
 		}catch(SQLException e) {
 			throw new ExcecaoDataBase(e.getMessage());
@@ -132,6 +133,7 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO{
 	private Cliente instanciandoCliente(ResultSet rs) throws SQLException {
 		Cliente cliente = new Cliente();
 		cliente.setNome(rs.getString("cliente.nome"));
+		cliente.setCPF(rs.getString("cliente.cpf"));
 		return cliente;
 	}
 	

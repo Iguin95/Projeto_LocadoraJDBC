@@ -3,6 +3,7 @@ package aplication;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.Set;
 
 import entity.Celular;
 import entity.Cidade;
@@ -69,10 +70,10 @@ public class Program {
 		System.out.println();
 		System.out.println("----Teste Cliente com filme----");
 		Cliente_FilmeDAO cliFilDao = FabricaDAO.criarClienteFilmeDAO();
-		List<Cliente> clientesFilmes = cliFilDao.acharTodosClientesComFilmes();
+		Set<Cliente> clientesFilmes = cliFilDao.acharTodosClientesComFilmes();
 
 		for (Cliente todosClienteFilmes : clientesFilmes) {
-			System.out.println(todosClienteFilmes);
+			System.out.println(todosClienteFilmes.clienteFilmeString());
 		}
 
 		sc.close();
