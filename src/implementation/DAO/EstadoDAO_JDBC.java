@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import data_base.ConexaoDB;
@@ -66,8 +67,29 @@ public class EstadoDAO_JDBC implements EstadoDAO{
 
 	@Override
 	public List<Estado> acharTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement( 
+					"select estado.nome_estado from estado "
+					+ "order by estado.nome_estado "
+					);
+			
+			rs = ps.executeQuery();
+			List<Estado> list = new ArrayList<>();
+			
+			while(rs.next()) {
+				Estado est = instanciandoEstado(rs);
+				
+				list.add(est);
+			}
+			return list;
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
 	}
 
 	private Estado instanciandoEstado(ResultSet rs) throws SQLException {

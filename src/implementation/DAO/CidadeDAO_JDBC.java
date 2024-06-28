@@ -77,7 +77,7 @@ public class CidadeDAO_JDBC implements CidadeDAO{
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement(
-					"select cidade.*, cidade.nome_cidade, cidade.cep, " 
+					"select cidade.nome_cidade, cidade.cep, " 
 					+ "estado.nome_estado "
 					+ "from cidade join estado on estado.id = cidade.estado_da_cidade "
 					+ "order by cidade.nome_cidade"

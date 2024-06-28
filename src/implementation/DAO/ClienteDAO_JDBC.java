@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import data_base.ConexaoDB;
@@ -86,12 +87,45 @@ public class ClienteDAO_JDBC implements ClienteDAO{
 
 	@Override
 	public List<Cliente> acharTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"select cliente.CPF, cliente.nome, cliente.idade, "
+					+ "endereco.rua, endereco.bairro, endereco.numeroCasa, endereco.complemento, "
+					+ "celular.numeroCelular, "
+					+ "cidade.nome_cidade, cidade.cep, "
+					+ "estado.nome_estado "
+					+ "from cliente join endereco on endereco.id = cliente.endereco_cliente "
+					+ "join celular on celular.id = cliente.celular_cliente "
+					+ "join cidade on cidade.id = endereco.id_Cidade "
+					+ "join estado on estado.id = cidade.estado_da_cidade "
+					+ "order by cliente.nome "
+					);
+				
+			rs = ps.executeQuery();
+			List<Cliente> list = new ArrayList<>();
+			while(rs.next()) {
+				
+				Estado est = instanciandoEstado(rs);
+				Celular cell = instanciandoCelular(rs);
+				Cidade cid = instanciandoCidade(rs, est);
+				Endereco end = instanciandoEndereco(rs, cid);
+				Cliente obj = instanciandoCliente(rs, cell, end);
+				
+				list.add(obj);
+				
+			}
+			return list;			
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}
+		finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
 	}
 
-	
-	
 	//Funções para reutilização de instanciações
 	private Estado instanciandoEstado(ResultSet rs) throws SQLException {
 		Estado est = new Estado();

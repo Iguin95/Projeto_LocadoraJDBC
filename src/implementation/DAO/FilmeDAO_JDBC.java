@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import data_base.ConexaoDB;
@@ -68,8 +69,30 @@ public class FilmeDAO_JDBC implements FilmeDAO{
 
 	@Override
 	public List<Filme> acharTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"select filme.nome_filme, filme.classificacao, filme.ano, filme.preco "
+					+ "from filme order by filme.nome_filme "
+					);
+					
+			rs = ps.executeQuery();
+			List<Filme> list = new ArrayList<>();
+			
+			while(rs.next()) {
+				Filme filme = instanciandoFilme(rs);
+								
+				list.add(filme);
+			}
+			return list;
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
+		
 	}
 
 	@Override

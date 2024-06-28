@@ -74,7 +74,7 @@ public class CelularDAO_JDBC implements CelularDAO{
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement(
-					"select celular.*, celular.numeroCelular, cliente.nome "
+					"select celular.numeroCelular, cliente.nome "
 					+ "from cliente join celular on celular.id = cliente.celular_cliente "
 					+ "order by cliente.nome"
 					);

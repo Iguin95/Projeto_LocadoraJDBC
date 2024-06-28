@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import data_base.ConexaoDB;
@@ -73,13 +74,42 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 			ConexaoDB.FecharStatement(ps);
 			ConexaoDB.FecharResultSet(rs);
 		}
-		
 	}
 
 	@Override
 	public List<Endereco> acharTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"select endereco.id, endereco.rua, endereco.bairro, endereco.numeroCasa, endereco.complemento, " 
+					+ "cidade.nome_cidade, cidade.cep, estado.nome_estado "
+					+ "from endereco join cidade on cidade.id = endereco.id_Cidade "
+					+ "join estado on estado.id = cidade.estado_da_cidade "
+					+ "order by cidade.nome_cidade "
+					);
+			
+			rs = ps.executeQuery();
+			List<Endereco> list = new ArrayList<>();
+			while(rs.next()) {
+				Endereco end = instanciandoEndereco(rs);
+				
+				Cidade cid = instanciandoCidade(rs);
+				
+				Estado est = instanciandoEstado(rs);
+				
+				cid.setUf(est);
+				end.setCidade(cid);
+				
+				list.add(end);
+			}
+			return list;
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
 	}
 	
 	private Endereco instanciandoEndereco(ResultSet rs) throws SQLException {

@@ -92,7 +92,7 @@ public class Cliente implements Serializable {
 	public String toString() {
 		return "Cliente -> CPF: " + CPF + "\nNome: " + nome 
 				+ ";\nIdade: " + idade + "; \n\n" + endereco + "\n" + celular + "\n"
-				+ "________________________ \n";
+				+ "_____________________________________________________________ \n";
 	}
 
 	public String clienteFilmeString() {

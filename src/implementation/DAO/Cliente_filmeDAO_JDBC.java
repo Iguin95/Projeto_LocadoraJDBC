@@ -98,7 +98,7 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO{
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement(
-					"select cliente.*, cliente.nome, cliente.cpf "
+					"select cliente.nome, cliente.cpf "
 					+ "from cliente join filme_cliente on cliente.cpf = filme_cliente.idCliente "
 					+ "order by cliente.nome"
 					);
