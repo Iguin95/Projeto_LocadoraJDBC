@@ -43,27 +43,25 @@ public class Program {
 		}
 		
 		System.out.println();
-		System.out.println("----Teste Cidade----");
-		CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
-		List<Cidade> cid = cidadeDao.acharTodos();
-		for (Cidade cidade : cid) {
-			System.out.println(cidade);
-		}
-		
-		System.out.println();
 		System.out.println("----Teste Estado----");
 		EstadoDAO estadoDao = FabricaDAO.criarEstadoDAO();
-		List<Estado> est = estadoDao.acharTodos();
-		for (Estado estado : est) {
-			System.out.println(estado);
-		}
+		Estado estado = new Estado(1, null);
+		
 		
 		System.out.println();
+		System.out.println("----Teste Cidade----");
+		CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
+		Cidade novaCidade = new Cidade(null, "Ipatinga", "12300-880", estado);
+		cidadeDao.inserir(novaCidade);
+		System.out.println("Inserido! Novo ID = " + novaCidade.getId());
+		
+		
+		/*System.out.println();
 		System.out.println("----Teste Celular----");
 		CelularDAO celularDao = FabricaDAO.criarCelularDAO();
 		Celular novoCelular = new Celular(null, "31988710060");
 		celularDao.inserir(novoCelular);
-		System.out.println("Inserido! Novo ID = " + novoCelular.getId());
+		System.out.println("Inserido! Novo ID = " + novoCelular.getId());*/
 		
 
 		System.out.println();

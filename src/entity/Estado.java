@@ -12,7 +12,7 @@ public class Estado implements Serializable  {
 	public Estado() {
 	}
 
-	public Estado(String nome,Integer id) {
+	public Estado(Integer id, String nome) {
 		this.nome = nome;
 		this.id = id;
 	}
