@@ -35,29 +35,24 @@ public class Program {
 			System.out.println(cliente);
 		}
 		
-		System.out.println("----Teste Endereço----");
+		//System.out.println();
+		//System.out.println("----Teste Estado----");
+		//EstadoDAO estadoDao = FabricaDAO.criarEstadoDAO();
+		//Estado estado = new Estado(1, null);
+		
+		
+		//System.out.println();
+		//System.out.println("----Teste Cidade----");
+		//CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
+		Cidade cidade = new Cidade(1, null, null, null);
+		
+		
+		/*System.out.println("----Teste Endereço----");
 		EnderecoDAO enderecoDao = FabricaDAO.criarEnderecoDAO();
-		List<Endereco> end = enderecoDao.acharTodos();
-		for (Endereco endereco : end) {
-			System.out.println(endereco);
-		}
-		
-		/*System.out.println();
-		System.out.println("----Teste Estado----");
-		EstadoDAO estadoDao = FabricaDAO.criarEstadoDAO();
-		Estado novoEstado = new Estado(null, "Espírito Santo");
-		estadoDao.inserir(novoEstado);
-		System.out.println("Inserido! Novo ID = " + novoEstado.getId());*/
-		
-		
-		/*System.out.println();
-		System.out.println("----Teste Cidade----");
-		CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
-		Cidade novaCidade = new Cidade(null, "Ipatinga", "12300-880", estado);
-		cidadeDao.inserir(novaCidade);
-		System.out.println("Inserido! Novo ID = " + novaCidade.getId());*/
-		
-		
+		Endereco novoEndereco = new Endereco(null, cidade, "Clóvis Salgado", "Industrial", "874C", "Apartamento");
+		enderecoDao.inserir(novoEndereco);
+		System.out.println("Inserido! Novo ID = " + novoEndereco.getId());*/
+				
 		/*System.out.println();
 		System.out.println("----Teste Celular----");
 		CelularDAO celularDao = FabricaDAO.criarCelularDAO();
