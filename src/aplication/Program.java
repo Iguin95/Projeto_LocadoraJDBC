@@ -42,18 +42,20 @@ public class Program {
 			System.out.println(endereco);
 		}
 		
-		System.out.println();
+		/*System.out.println();
 		System.out.println("----Teste Estado----");
 		EstadoDAO estadoDao = FabricaDAO.criarEstadoDAO();
-		Estado estado = new Estado(1, null);
+		Estado novoEstado = new Estado(null, "Espírito Santo");
+		estadoDao.inserir(novoEstado);
+		System.out.println("Inserido! Novo ID = " + novoEstado.getId());*/
 		
 		
-		System.out.println();
+		/*System.out.println();
 		System.out.println("----Teste Cidade----");
 		CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
 		Cidade novaCidade = new Cidade(null, "Ipatinga", "12300-880", estado);
 		cidadeDao.inserir(novaCidade);
-		System.out.println("Inserido! Novo ID = " + novaCidade.getId());
+		System.out.println("Inserido! Novo ID = " + novaCidade.getId());*/
 		
 		
 		/*System.out.println();

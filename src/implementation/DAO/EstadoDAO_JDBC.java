@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,35 @@ public class EstadoDAO_JDBC implements EstadoDAO{
 
 	@Override
 	public void inserir(Estado obj) {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(
+					"insert into estado "
+					+ "(nome_estado) "
+					+ "values "
+					+ "(?) ",
+					Statement.RETURN_GENERATED_KEYS
+					);
+			
+			ps.setString(1, obj.getNome());
+			
+			int linhasAfetadas = ps.executeUpdate();
+			
+			if(linhasAfetadas > 0) {
+				ResultSet rs = ps.getGeneratedKeys();
+				if(rs.next()) {
+					int id = rs.getInt(1);
+					obj.setId(id);
+				}
+				ConexaoDB.FecharResultSet(rs);
+			}else {
+				throw new ExcecaoDataBase("Erro inesperado! Nenhuma linha foi afetada");
+			}
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+		}
 		
 	}
 
