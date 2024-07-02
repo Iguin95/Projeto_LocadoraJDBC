@@ -61,10 +61,9 @@ public class Program {
 		System.out.println();
 		System.out.println("----Teste Celular----");
 		CelularDAO celularDao = FabricaDAO.criarCelularDAO();
-		List<Celular> cel = celularDao.acharTodos();
-		for (Celular celular : cel) {
-			System.out.println(celular.retornoCelularCliente());
-		}
+		Celular novoCelular = new Celular(null, "31988710060");
+		celularDao.inserir(novoCelular);
+		System.out.println("Inserido! Novo ID = " + novoCelular.getId());
 		
 
 		System.out.println();

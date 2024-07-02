@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,34 @@ public class CelularDAO_JDBC implements CelularDAO{
 
 	@Override
 	public void inserir(Celular obj) {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(
+					"insert into celular "
+					+ "(numeroCelular) "
+					+ "values "
+					+ "(?) ",
+					Statement.RETURN_GENERATED_KEYS
+					);
+			ps.setString(1, obj.getNumero());
+			
+			int linhasAfetadas = ps.executeUpdate();
+			
+			if(linhasAfetadas > 0) {
+				ResultSet rs = ps.getGeneratedKeys();
+				if(rs.next()) {
+					int id = rs.getInt(1);
+					obj.setId(id);
+				}
+				ConexaoDB.FecharResultSet(rs);
+			}else {
+				throw new ExcecaoDataBase("Erro inesperado! Nenhuma linha foi afetada");
+			}
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+		}
 		
 	}
 
