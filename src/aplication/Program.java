@@ -44,7 +44,7 @@ public class Program {
 		//System.out.println();
 		//System.out.println("----Teste Cidade----");
 		//CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
-		Cidade cidade = new Cidade(1, null, null, null);
+		//Cidade cidade = new Cidade(1, null, null, null);
 		
 		
 		/*System.out.println("----Teste Endereço----");
@@ -64,10 +64,9 @@ public class Program {
 		System.out.println();
 		System.out.println("----Teste Filme----");
 		FilmeDAO filmeDao = FabricaDAO.criarFilmeDAO();
-		List<Filme> filme = filmeDao.acharTodos();
-		for (Filme fil : filme) {
-			System.out.println(fil);
-		}
+		Filme novoFilme = new Filme(null, "Procurando Nemo", 0, 2003, 30.00);
+		filmeDao.inserir(novoFilme);
+		System.out.println("Inserido! Novo ID = " + novoFilme.getId());
 	
 		System.out.println();
 		System.out.println("----Teste Cliente com filme----");

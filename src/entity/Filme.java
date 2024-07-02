@@ -16,7 +16,7 @@ public class Filme implements Serializable {
 	public Filme() {
 	}
 	
-	public Filme(Integer classificacao, String nome,Integer ano, Double preco, Integer id) {
+	public Filme(Integer id, String nome, Integer classificacao, Integer ano, Double preco) {
 		this.classificacao = classificacao;
 		this.nome = nome;
 		this.preco = preco;
