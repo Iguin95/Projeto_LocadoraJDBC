@@ -43,7 +43,7 @@ public class Program {
 	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //define o formato da data
 	    //LocalDate aniversario = LocalDate.parse(dataNascimentoStr, formatter); //Usa LocalDate.parse para converter a String para um objeto LocalDate
 
-		System.out.println("----Teste Cliente----");
+		/*System.out.println("----Teste Cliente----");
 		ClienteDAO clienteDao = FabricaDAO.criarClienteDAO();
 		Cliente cliente = clienteDao.encontrarPorIdParaAtualizar("00011177788");
 		String cpfOriginal = cliente.getCPF();
@@ -57,7 +57,7 @@ public class Program {
 		cliente.setCelular(cel);
 		
 		clienteDao.atualizar(cliente, cpfOriginal);
-		System.out.println("Atualizado!");
+		System.out.println("Atualizado!");*/
 		
 		//System.out.println();
 		//System.out.println("----Teste Estado----");
@@ -77,11 +77,19 @@ public class Program {
 		System.out.println("Atualizado!");*/
 		
 		
-		/*System.out.println("----Teste Endereço----");
+		System.out.println("----Teste Endereço----");
 		EnderecoDAO enderecoDao = FabricaDAO.criarEnderecoDAO();
-		Endereco novoEndereco = new Endereco(null, cidade, "Clóvis Salgado", "Industrial", "874C", "Apartamento");
-		enderecoDao.inserir(novoEndereco);
-		System.out.println("Inserido! Novo ID = " + novoEndereco.getId());*/
+		Endereco endereco = enderecoDao.encontrarPorIdParaAtualizar(10);
+		endereco.setRua("Av. Governador Valadares");
+		endereco.setBairro("Centro");
+		endereco.setComplemento("Mansão");
+		endereco.setNumero("910C");
+		
+		Cidade cid = new Cidade(4, null, null, null);
+		endereco.setCidade(cid);
+		
+		enderecoDao.atualizar(endereco);
+		System.out.println("Atualizado!");
 				
 		/*System.out.println();
 		System.out.println("----Teste Celular----");

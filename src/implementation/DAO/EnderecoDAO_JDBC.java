@@ -62,8 +62,59 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 
 	@Override
 	public void atualizar(Endereco obj) {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(
+					"update endereco "
+					+ "set rua = ?, bairro = ?, numeroCasa = ?, complemento = ?, id_Cidade = ? "
+					+ "where id = ? "
+					);
+			ps.setString(1, obj.getRua());
+			ps.setString(2, obj.getBairro());
+			ps.setString(3, obj.getNumero());
+			ps.setString(4, obj.getComplemento());
+			ps.setInt(5, obj.getCidade().getId());
+			ps.setInt(6, obj.getId());
+			
+			ps.executeUpdate();
+					
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+		}
+
 		
+	}
+	
+
+	@Override
+	public Endereco encontrarPorIdParaAtualizar(Integer id) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"select * from endereco where endereco.id = ?"
+					);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {	
+				Cidade cid = new Cidade();
+				cid.setId(rs.getInt("id_Cidade"));
+				
+				Endereco end = new Endereco();
+				end.setId(rs.getInt("endereco.id"));	
+				
+				return end;
+			}
+			return null;
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
 	}
 
 	@Override
@@ -165,5 +216,6 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 		est.setNome(rs.getString("estado.nome_estado"));
 		return est;
 	}
+
 
 }

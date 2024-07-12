@@ -10,6 +10,7 @@ public interface EnderecoDAO {
 	void atualizar(Endereco obj);
 	void deletarPorId(Integer id);
 	Endereco encontrarPorId(Integer id);
+	Endereco encontrarPorIdParaAtualizar(Integer id);
 	List<Endereco> acharTodos();
 
 }
