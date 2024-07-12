@@ -57,8 +57,23 @@ public class CelularDAO_JDBC implements CelularDAO{
 
 	@Override
 	public void atualizar(Celular obj) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(
+					"update celular "
+					+ "set numeroCelular = ? "
+					+ "where celular.id = ? "
+					);
+			ps.setString(1, obj.getNumero());
+			ps.setInt(2, obj.getId());
+			
+			ps.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+		}
 	}
 
 	@Override
@@ -86,6 +101,36 @@ public class CelularDAO_JDBC implements CelularDAO{
 				Celular cel = instanciandoCelular(rs, cli);
 				
 				return cel;
+			}
+			return null;
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
+	}
+	
+	/*Método abaixo criado para atualização do celular no DB pois,
+	 * só atualizaria se somente o celular fosse instanciado, se é
+	 * instanciado com o cliente, não pode ser atualizado.*/
+	@Override
+	public Celular encontrarSomenteCelularPorId(Integer id) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"select * from celular where id = ?"
+					);
+			ps.setInt(1, id);
+			
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				Celular celular = new Celular();
+				celular.setId(rs.getInt("id"));
+				celular.setNumero(rs.getString("numeroCelular"));
+				return celular;				
 			}
 			return null;
 		}catch(SQLException e) {
@@ -140,5 +185,7 @@ public class CelularDAO_JDBC implements CelularDAO{
 		cel.setCliente(cli);
 		return cel;
 	}
+
+	
 
 }

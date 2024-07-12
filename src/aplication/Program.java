@@ -33,21 +33,21 @@ public class Program {
 		Scanner sc = new Scanner(System.in);
 		
 		
-		Endereco end = new Endereco(11, null, null, null, null, null);
-		Celular cel = new Celular(2, null);
+		//Endereco end = new Endereco(11, null, null, null, null, null);
+		//Celular cel = new Celular(2, null);
 		
-		System.out.print("Digite a data de nascimento (dd/MM/yyyy): ");
-	    String dataNascimentoStr = sc.nextLine();
+		//System.out.print("Digite a data de nascimento (dd/MM/yyyy): ");
+	    //String dataNascimentoStr = sc.nextLine();
 
 	    // Converte a string para LocalDate
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //define o formato da data
-	    LocalDate aniversario = LocalDate.parse(dataNascimentoStr, formatter); //Usa LocalDate.parse para converter a String para um objeto LocalDate
+	    //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //define o formato da data
+	    //LocalDate aniversario = LocalDate.parse(dataNascimentoStr, formatter); //Usa LocalDate.parse para converter a String para um objeto LocalDate
 
-		System.out.println("----Teste Cliente----");
-		ClienteDAO clienteDao = FabricaDAO.criarClienteDAO();
-		Cliente novoCliente = new Cliente("62145789355", "Ragnar Dimitrus", aniversario, end, cel);
-		clienteDao.inserir(novoCliente);
-		System.out.println("Inserido! Novo ID = " + novoCliente.getCPF());
+		//System.out.println("----Teste Cliente----");
+		//ClienteDAO clienteDao = FabricaDAO.criarClienteDAO();
+		Cliente cliente = new Cliente("62145789355", null, null, null, null);
+		//clienteDao.inserir(novoCliente);
+		//System.out.println("Inserido! Novo ID = " + novoCliente.getCPF());
 		
 		//System.out.println();
 		//System.out.println("----Teste Estado----");
@@ -67,12 +67,13 @@ public class Program {
 		enderecoDao.inserir(novoEndereco);
 		System.out.println("Inserido! Novo ID = " + novoEndereco.getId());*/
 				
-		/*System.out.println();
+		System.out.println();
 		System.out.println("----Teste Celular----");
 		CelularDAO celularDao = FabricaDAO.criarCelularDAO();
-		Celular novoCelular = new Celular(null, "31988710060");
-		celularDao.inserir(novoCelular);
-		System.out.println("Inserido! Novo ID = " + novoCelular.getId());*/
+		Celular celular = celularDao.encontrarSomenteCelularPorId(3);
+		celular.setNumero("31998451238");
+		celularDao.atualizar(celular);
+		System.out.println("Atualizado!");
 		
 
 		/*System.out.println();
@@ -82,14 +83,14 @@ public class Program {
 		filmeDao.inserir(novoFilme);
 		System.out.println("Inserido! Novo ID = " + novoFilme.getId());*/
 	
-		System.out.println();
+		/*System.out.println();
 		System.out.println("----Teste Cliente com filme----");
 		Cliente_FilmeDAO cliFilDao = FabricaDAO.criarClienteFilmeDAO();
 		Set<Cliente> clientesFilmes = cliFilDao.acharTodosClientesComFilmes();
 
 		for (Cliente todosClienteFilmes : clientesFilmes) {
 			System.out.println(todosClienteFilmes.clienteFilmeString());
-		}
+		}*/
 
 		sc.close();
 	}
