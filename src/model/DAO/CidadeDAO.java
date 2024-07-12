@@ -10,6 +10,7 @@ public interface CidadeDAO {
 	void atualizar(Cidade obj);
 	void deletarPorId(Integer id);
 	Cidade encontrarPorId(Integer id);
+	Cidade encontrarPorIdParaAtualizar(Integer id);
 	List<Cidade> acharTodos();
 
 }

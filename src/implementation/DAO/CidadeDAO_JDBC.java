@@ -58,7 +58,25 @@ public class CidadeDAO_JDBC implements CidadeDAO{
 
 	@Override
 	public void atualizar(Cidade obj) {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(
+					"update cidade "
+					+ "set nome_cidade = ?, cep = ?, estado_da_cidade = ? "
+					+ "where id = ? "
+					);
+			ps.setString(1, obj.getNome());
+			ps.setString(2, obj.getCEP());
+			ps.setInt(3, obj.getUf().getId());
+			ps.setInt(4, obj.getId());
+			
+			ps.executeUpdate();
+					
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+		}
 		
 	}
 
@@ -86,6 +104,39 @@ public class CidadeDAO_JDBC implements CidadeDAO{
 				Estado est = instanciandoEstado(rs);
 								
 				Cidade cid = instanciandocidade(rs, est);
+								
+				cid.setUf(est);
+				
+				return cid;
+			}
+			return null;
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
+	}
+	
+	@Override
+	public Cidade encontrarPorIdParaAtualizar(Integer id) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"select * from cidade where cidade.id = ?"
+					);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {				
+				Estado est = new Estado();
+				est.setId(rs.getInt("estado_da_cidade"));
+								
+				Cidade cid = new Cidade();
+				cid.setId(rs.getInt("cidade.id"));
+				cid.setNome(rs.getString("cidade.nome_cidade"));
+				cid.setCEP(rs.getString("cidade.cep"));
 								
 				cid.setUf(est);
 				
@@ -146,4 +197,6 @@ public class CidadeDAO_JDBC implements CidadeDAO{
 		cid.setUf(est);
 		return cid;
 	}
+
+	
 }

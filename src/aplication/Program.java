@@ -56,9 +56,15 @@ public class Program {
 		
 		
 		//System.out.println();
-		//System.out.println("----Teste Cidade----");
-		//CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
-		//Cidade cidade = new Cidade(1, null, null, null);
+		System.out.println("----Teste Cidade----");
+		CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
+		Cidade cidade = cidadeDao.encontrarPorIdParaAtualizar(5);
+		cidade.setNome("São Joaquim de Bicas");
+		cidade.setCEP("36494-572");
+		Estado estado = new Estado(1, null);
+		cidade.setUf(estado);
+		cidadeDao.atualizar(cidade);
+		System.out.println("Atualizado!");
 		
 		
 		/*System.out.println("----Teste Endereço----");
@@ -67,13 +73,13 @@ public class Program {
 		enderecoDao.inserir(novoEndereco);
 		System.out.println("Inserido! Novo ID = " + novoEndereco.getId());*/
 				
-		System.out.println();
+		/*System.out.println();
 		System.out.println("----Teste Celular----");
 		CelularDAO celularDao = FabricaDAO.criarCelularDAO();
 		Celular celular = celularDao.encontrarSomenteCelularPorId(3);
 		celular.setNumero("31998451238");
 		celularDao.atualizar(celular);
-		System.out.println("Atualizado!");
+		System.out.println("Atualizado!");*/
 		
 
 		/*System.out.println();

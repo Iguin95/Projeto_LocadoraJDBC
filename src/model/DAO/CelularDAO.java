@@ -9,7 +9,7 @@ public interface CelularDAO {
 	void atualizar(Celular obj);
 	void deletarPorId(Integer id);
 	Celular encontrarPorId(Integer id);
-	Celular encontrarSomenteCelularPorId(Integer id); //Método útil para atualização no DB
+	Celular encontrarPorIdParaAtualizar(Integer id); //Método útil para atualização no DB
 	List<Celular> acharTodos();
 
 }

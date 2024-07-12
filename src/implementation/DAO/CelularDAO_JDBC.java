@@ -115,7 +115,7 @@ public class CelularDAO_JDBC implements CelularDAO{
 	 * só atualizaria se somente o celular fosse instanciado, se é
 	 * instanciado com o cliente, não pode ser atualizado.*/
 	@Override
-	public Celular encontrarSomenteCelularPorId(Integer id) {
+	public Celular encontrarPorIdParaAtualizar(Integer id) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
