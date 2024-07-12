@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Date;
 
 import data_base.ConexaoDB;
 import data_base.ExcecaoDataBase;
@@ -18,6 +19,8 @@ import entity.Estado;
 import model.DAO.ClienteDAO;
 
 public class ClienteDAO_JDBC implements ClienteDAO {
+	
+	Date date;
 
 	private Connection conn;
 
@@ -40,7 +43,7 @@ public class ClienteDAO_JDBC implements ClienteDAO {
 				
 				ps.setString(1, obj.getCPF());
 				ps.setString(2, obj.getNome());
-				ps.setDate(3, java.sql.Date.valueOf(obj.getIdade()));/*Ao inserir uma data no banco de dados, 
+				ps.setDate(3, Date.valueOf(obj.getIdade()));/*Ao inserir uma data no banco de dados, 
 				é necessário convertê-la para java.sql.Date. Isso pode ser feito usando o método valueOf de 
 				java.sql.Date, que aceita um LocalDate.*/
 
@@ -92,9 +95,63 @@ public class ClienteDAO_JDBC implements ClienteDAO {
 	}
 
 	@Override
-	public void atualizar(Cliente obj) {
-		// TODO Auto-generated method stub
+	public void atualizar(Cliente obj, String cpfOriginal) {
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(
+					"update cliente "
+					+ "set cpf = ?, nome = ?, idade = ?, endereco_cliente = ?, celular_cliente = ? "
+					+ "where cpf = ? "
+					);
+			ps.setString(1, obj.getCPF());
+			ps.setString(2, obj.getNome());
+			ps.setDate(3, Date.valueOf(obj.getIdade()));
+			ps.setInt(4, obj.getEndereco().getId());
+			ps.setInt(5, obj.getCelular().getId());
+			ps.setString(6, cpfOriginal);
+			
+			ps.executeUpdate();
+					
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+		}
 
+	}
+	
+	@Override
+	public Cliente encontrarPorIdParaAtualizar(String id) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"select * from cliente where cliente.cpf = ?"
+					);
+			ps.setString(1, id);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {	
+				Endereco end = new Endereco();
+				end.setId(rs.getInt("endereco_cliente"));
+				
+				Celular cel = new Celular();
+				cel.setId(rs.getInt("celular_cliente"));
+				
+				Cliente cli = new Cliente();
+				cli.setCPF(rs.getString("cpf"));
+				cli.setNome(rs.getString("nome"));
+				cli.setIdade(rs.getDate("idade").toLocalDate());				
+				
+				return cli;
+			}
+			return null;
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
 	}
 
 	@Override
@@ -142,6 +199,7 @@ public class ClienteDAO_JDBC implements ClienteDAO {
 			ConexaoDB.FecharResultSet(rs);
 		}
 	}
+	
 
 	@Override
 	public List<Cliente> acharTodos() {

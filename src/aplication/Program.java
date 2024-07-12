@@ -40,14 +40,24 @@ public class Program {
 	    //String dataNascimentoStr = sc.nextLine();
 
 	    // Converte a string para LocalDate
-	    //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //define o formato da data
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //define o formato da data
 	    //LocalDate aniversario = LocalDate.parse(dataNascimentoStr, formatter); //Usa LocalDate.parse para converter a String para um objeto LocalDate
 
-		//System.out.println("----Teste Cliente----");
-		//ClienteDAO clienteDao = FabricaDAO.criarClienteDAO();
-		Cliente cliente = new Cliente("62145789355", null, null, null, null);
-		//clienteDao.inserir(novoCliente);
-		//System.out.println("Inserido! Novo ID = " + novoCliente.getCPF());
+		System.out.println("----Teste Cliente----");
+		ClienteDAO clienteDao = FabricaDAO.criarClienteDAO();
+		Cliente cliente = clienteDao.encontrarPorIdParaAtualizar("00011177788");
+		String cpfOriginal = cliente.getCPF();
+		cliente.setNome("Pablo Snake");
+		cliente.setCPF("88800011177");
+		cliente.setIdade(LocalDate.parse("01/02/2003", formatter));
+		
+		Endereco end = new Endereco(10, null, null, null, null, null);
+		cliente.setEndereco(end);
+		Celular cel = new Celular(1, null);
+		cliente.setCelular(cel);
+		
+		clienteDao.atualizar(cliente, cpfOriginal);
+		System.out.println("Atualizado!");
 		
 		//System.out.println();
 		//System.out.println("----Teste Estado----");
@@ -55,7 +65,7 @@ public class Program {
 		//Estado estado = new Estado(1, null);
 		
 		
-		//System.out.println();
+		/*System.out.println();
 		System.out.println("----Teste Cidade----");
 		CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
 		Cidade cidade = cidadeDao.encontrarPorIdParaAtualizar(5);
@@ -64,7 +74,7 @@ public class Program {
 		Estado estado = new Estado(1, null);
 		cidade.setUf(estado);
 		cidadeDao.atualizar(cidade);
-		System.out.println("Atualizado!");
+		System.out.println("Atualizado!");*/
 		
 		
 		/*System.out.println("----Teste Endereço----");
