@@ -10,6 +10,8 @@ import java.util.List;
 
 import data_base.ConexaoDB;
 import data_base.ExcecaoDataBase;
+import entity.Cidade;
+import entity.Endereco;
 import entity.Estado;
 import model.DAO.EstadoDAO;
 
@@ -57,8 +59,50 @@ public class EstadoDAO_JDBC implements EstadoDAO{
 
 	@Override
 	public void atualizar(Estado obj) {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(
+					"update estado "
+					+ "set nome_estado = ? "
+					+ "where id = ?"
+					);
+			ps.setString(1, obj.getNome());
+			ps.setInt(2, obj.getId());
+			
+			ps.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+		}
 		
+	}
+	
+	@Override
+	public Estado encontrarPorIdParaAtualizar(Integer id) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"select * from estado where estado.id = ?"
+					);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {	
+				Estado est = new Estado();
+				est.setId(rs.getInt("estado.id"));	
+				
+				return est;
+			}
+			return null;
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
 	}
 
 	@Override
@@ -126,4 +170,5 @@ public class EstadoDAO_JDBC implements EstadoDAO{
 		est.setNome(rs.getString("estado.nome_estado"));
 		return est;
 	}
+
 }

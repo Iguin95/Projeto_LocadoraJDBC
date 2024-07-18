@@ -10,6 +10,7 @@ public interface EstadoDAO {
 	void atualizar(Estado obj);
 	void deletarPorId(Integer id);
 	Estado encontrarPorId(Integer id);
+	Estado encontrarPorIdParaAtualizar(Integer id);
 	List<Estado> acharTodos();
 
 }

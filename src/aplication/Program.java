@@ -60,10 +60,12 @@ public class Program {
 		System.out.println("Atualizado!");*/
 		
 		//System.out.println();
-		//System.out.println("----Teste Estado----");
-		//EstadoDAO estadoDao = FabricaDAO.criarEstadoDAO();
-		//Estado estado = new Estado(1, null);
-		
+		System.out.println("----Teste Estado----");
+		EstadoDAO estadoDao = FabricaDAO.criarEstadoDAO();
+		Estado estado = estadoDao.encontrarPorIdParaAtualizar(4);
+		estado.setNome("Maranhão");
+		estadoDao.atualizar(estado);
+		System.out.println("Atualizado!");
 		
 		/*System.out.println();
 		System.out.println("----Teste Cidade----");
@@ -77,7 +79,7 @@ public class Program {
 		System.out.println("Atualizado!");*/
 		
 		
-		System.out.println("----Teste Endereço----");
+		/*System.out.println("----Teste Endereço----");
 		EnderecoDAO enderecoDao = FabricaDAO.criarEnderecoDAO();
 		Endereco endereco = enderecoDao.encontrarPorIdParaAtualizar(10);
 		endereco.setRua("Av. Governador Valadares");
@@ -89,7 +91,7 @@ public class Program {
 		endereco.setCidade(cid);
 		
 		enderecoDao.atualizar(endereco);
-		System.out.println("Atualizado!");
+		System.out.println("Atualizado!");*/
 				
 		/*System.out.println();
 		System.out.println("----Teste Celular----");
