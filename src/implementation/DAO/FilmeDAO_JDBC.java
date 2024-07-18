@@ -11,6 +11,7 @@ import java.util.List;
 import data_base.ConexaoDB;
 import data_base.ExcecaoDataBase;
 import entity.Cliente;
+import entity.Estado;
 import entity.Filme;
 import model.DAO.FilmeDAO;
 
@@ -61,8 +62,53 @@ public class FilmeDAO_JDBC implements FilmeDAO{
 
 	@Override
 	public void atualizar(Filme obj) {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(
+					"update filme "
+					+ "set nome_filme = ?, classificacao = ?, ano = ?, preco = ? "
+					+ "where id = ? "
+					);
+			ps.setString(1, obj.getNome());
+			ps.setInt(2, obj.getClassificacao());
+			ps.setInt(3, obj.getAno());
+			ps.setDouble(4, obj.getPreco());
+			ps.setInt(5, obj.getId());
+			
+			ps.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+		}
 		
+	}
+	
+	@Override
+	public Filme encontrarPorIdParaAtualizar(Integer id) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"select * from filme where filme.id = ?"
+					);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {	
+				Filme fil = new Filme();
+				fil.setId(rs.getInt("filme.id"));	
+				
+				return fil;
+			}
+			return null;
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
 	}
 
 	@Override
@@ -141,5 +187,7 @@ public class FilmeDAO_JDBC implements FilmeDAO{
 		filme.setPreco(rs.getDouble("filme.preco"));
 		return filme;
 	}
+
+
 
 }

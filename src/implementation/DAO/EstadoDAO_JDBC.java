@@ -10,8 +10,6 @@ import java.util.List;
 
 import data_base.ConexaoDB;
 import data_base.ExcecaoDataBase;
-import entity.Cidade;
-import entity.Endereco;
 import entity.Estado;
 import model.DAO.EstadoDAO;
 

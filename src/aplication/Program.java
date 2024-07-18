@@ -60,12 +60,12 @@ public class Program {
 		System.out.println("Atualizado!");*/
 		
 		//System.out.println();
-		System.out.println("----Teste Estado----");
+		/*System.out.println("----Teste Estado----");
 		EstadoDAO estadoDao = FabricaDAO.criarEstadoDAO();
 		Estado estado = estadoDao.encontrarPorIdParaAtualizar(4);
 		estado.setNome("Maranhão");
 		estadoDao.atualizar(estado);
-		System.out.println("Atualizado!");
+		System.out.println("Atualizado!");*/
 		
 		/*System.out.println();
 		System.out.println("----Teste Cidade----");
@@ -102,12 +102,16 @@ public class Program {
 		System.out.println("Atualizado!");*/
 		
 
-		/*System.out.println();
+		System.out.println();
 		System.out.println("----Teste Filme----");
 		FilmeDAO filmeDao = FabricaDAO.criarFilmeDAO();
-		Filme novoFilme = new Filme(null, "Procurando Nemo", 0, 2003, 30.00);
-		filmeDao.inserir(novoFilme);
-		System.out.println("Inserido! Novo ID = " + novoFilme.getId());*/
+		Filme filme = filmeDao.encontrarPorIdParaAtualizar(4);
+		filme.setNome("Lorax");
+		filme.setAno(2010);
+		filme.setClassificacao(10);
+		filme.setPreco(15.00);
+		filmeDao.atualizar(filme);
+		System.out.println("Atualizado!");
 	
 		/*System.out.println();
 		System.out.println("----Teste Cliente com filme----");

@@ -11,6 +11,7 @@ public interface FilmeDAO {
 	void atualizar(Filme obj);
 	void deletarPorId(Integer id);
 	Filme encontrarPorId(Integer id);
+	Filme encontrarPorIdParaAtualizar(Integer id);
 	List<Filme> acharFilmeComCliente(Cliente cliente);
 	List<Filme> acharTodos();
 
