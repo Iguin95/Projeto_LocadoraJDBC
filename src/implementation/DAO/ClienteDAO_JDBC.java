@@ -11,6 +11,7 @@ import java.sql.Date;
 
 import data_base.ConexaoDB;
 import data_base.ExcecaoDataBase;
+import data_base.ExcecaoIntegridadeDB;
 import entity.Celular;
 import entity.Cidade;
 import entity.Cliente;
@@ -156,7 +157,21 @@ public class ClienteDAO_JDBC implements ClienteDAO {
 
 	@Override
 	public void deletarPorId(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(
+					"delete from cliente "
+					+ "where id = ? "
+					);
+			ps.setInt(1, id);
+			int rows = ps.executeUpdate();
+			
+			if(rows == 0) {
+				throw new ExcecaoDataBase("Id Inexistente!");
+			}
+		}catch(SQLException e) {
+			throw new ExcecaoIntegridadeDB(e.getMessage());
+		}		
 
 	}
 

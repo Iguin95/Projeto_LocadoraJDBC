@@ -32,53 +32,11 @@ public class Program {
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
 
-		/*System.out.println("----Teste Cliente----");
+		System.out.println("----Teste Cliente----");
 		ClienteDAO clienteDao = FabricaDAO.criarClienteDAO();
-		Cliente cliente = clienteDao.encontrarPorIdParaAtualizar("00011177788");
-		String cpfOriginal = cliente.getCPF();
-		cliente.setNome("Pablo Snake");
-		cliente.setCPF("88800011177");
-		cliente.setIdade(LocalDate.parse("01/02/2003", formatter));
-		
-		Endereco end = new Endereco(10, null, null, null, null, null);
-		cliente.setEndereco(end);
-		Celular cel = new Celular(1, null);
-		cliente.setCelular(cel);
-		
-		clienteDao.atualizar(cliente, cpfOriginal);
-		System.out.println("Atualizado!");*/
-		
-		
-		System.out.println("----Teste Estado----");
-		EstadoDAO estadoDao = FabricaDAO.criarEstadoDAO();
-		estadoDao.deletarPorId(5);
+		clienteDao.encontrarPorIdParaAtualizar("00011177788");
 		System.out.println("Deletado!");
-		
-		
-		System.out.println("----Teste Cidade----");
-		CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
-		cidadeDao.deletarPorId(5);
-		System.out.println("Deletado!");
-		
-		
-		System.out.println("----Teste Endereço----");
-		EnderecoDAO enderecoDao = FabricaDAO.criarEnderecoDAO();
-		enderecoDao.deletarPorId(12);
-		System.out.println("Deletado!");
-				
-		System.out.println();
-		System.out.println("----Teste Celular----");
-		CelularDAO celularDao = FabricaDAO.criarCelularDAO();
-		celularDao.deletarPorId(6);
-		System.out.println("Deletado!");
-		
-
-		System.out.println();
-		System.out.println("----Teste Filme----");
-		FilmeDAO filmeDao = FabricaDAO.criarFilmeDAO();
-		filmeDao.deletarPorId(6);
-		System.out.println("Deletado!");
-	
+			
 
 		sc.close();
 	}
