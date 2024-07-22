@@ -1,29 +1,14 @@
 package aplication;
 
-import java.text.DateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
-import java.util.Set;
 
-import entity.Celular;
-import entity.Cidade;
-import entity.Cliente;
 import entity.ClienteFilme;
-import entity.Endereco;
-import entity.Estado;
-import entity.Filme;
-import model.DAO.CelularDAO;
-import model.DAO.CidadeDAO;
 import model.DAO.ClienteDAO;
 import model.DAO.Cliente_FilmeDAO;
-import model.DAO.EnderecoDAO;
-import model.DAO.EstadoDAO;
 import model.DAO.FabricaDAO;
-import model.DAO.FilmeDAO;
+
 
 public class Program {
 
@@ -32,10 +17,15 @@ public class Program {
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
 
-		System.out.println("----Teste Cliente----");
-		ClienteDAO clienteDao = FabricaDAO.criarClienteDAO();
-		clienteDao.encontrarPorIdParaAtualizar("00011177788");
-		System.out.println("Deletado!");
+		System.out.println();
+		System.out.println("----Teste Cliente com filme----");
+		Cliente_FilmeDAO cliFilDao = FabricaDAO.criarClienteFilmeDAO();
+		
+		List<ClienteFilme> clientesFilmes = cliFilDao.acharClientesPorFilme(1);
+
+		for (ClienteFilme clienteFilme : clientesFilmes) {
+			System.out.println(clienteFilme);
+		}
 			
 
 		sc.close();
