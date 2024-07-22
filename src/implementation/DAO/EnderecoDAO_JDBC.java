@@ -10,6 +10,7 @@ import java.util.List;
 
 import data_base.ConexaoDB;
 import data_base.ExcecaoDataBase;
+import data_base.ExcecaoIntegridadeDB;
 import entity.Cidade;
 import entity.Endereco;
 import entity.Estado;
@@ -82,9 +83,7 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 			throw new ExcecaoDataBase(e.getMessage());
 		}finally {
 			ConexaoDB.FecharStatement(ps);
-		}
-
-		
+		}	
 	}
 	
 
@@ -119,8 +118,21 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 
 	@Override
 	public void deletarPorId(Integer id) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(
+					"delete from endereco "
+					+ "where id = ? "
+					);
+			ps.setInt(1, id);
+			int rows = ps.executeUpdate();
+			
+			if(rows == 0) {
+				throw new ExcecaoDataBase("Id Inexistente!");
+			}
+		}catch(SQLException e) {
+			throw new ExcecaoIntegridadeDB(e.getMessage());
+		}	
 	}
 
 	@Override

@@ -10,8 +10,7 @@ import java.util.List;
 
 import data_base.ConexaoDB;
 import data_base.ExcecaoDataBase;
-import entity.Cliente;
-import entity.Estado;
+import data_base.ExcecaoIntegridadeDB;
 import entity.Filme;
 import model.DAO.FilmeDAO;
 
@@ -113,8 +112,21 @@ public class FilmeDAO_JDBC implements FilmeDAO{
 
 	@Override
 	public void deletarPorId(Integer id) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(
+					"delete from filme "
+					+ "where id = ? "
+					);
+			ps.setInt(1, id);
+			int rows = ps.executeUpdate();
+			
+			if(rows == 0) {
+				throw new ExcecaoDataBase("Id Inexistente!");
+			}
+		}catch(SQLException e) {
+			throw new ExcecaoIntegridadeDB(e.getMessage());
+		}
 	}
 
 	@Override
@@ -173,11 +185,6 @@ public class FilmeDAO_JDBC implements FilmeDAO{
 		
 	}
 
-	@Override
-	public List<Filme> acharFilmeComCliente(Cliente cliente) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	private Filme instanciandoFilme(ResultSet rs) throws SQLException {
 		Filme filme = new Filme();

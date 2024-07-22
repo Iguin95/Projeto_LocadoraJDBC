@@ -2,7 +2,6 @@ package model.DAO;
 
 import java.util.List;
 
-import entity.Cliente;
 import entity.Filme;
 
 public interface FilmeDAO {
@@ -12,7 +11,6 @@ public interface FilmeDAO {
 	void deletarPorId(Integer id);
 	Filme encontrarPorId(Integer id);
 	Filme encontrarPorIdParaAtualizar(Integer id);
-	List<Filme> acharFilmeComCliente(Cliente cliente);
 	List<Filme> acharTodos();
 
 }
