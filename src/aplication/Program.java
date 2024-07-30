@@ -11,6 +11,7 @@ import java.util.Scanner;
 import entity.Celular;
 import entity.Cliente;
 import entity.Endereco;
+import model.DAO.CelularDAO;
 import model.DAO.ClienteDAO;
 import model.DAO.FabricaDAO;
 
@@ -96,7 +97,7 @@ public class Program {
 					}
 				}
 
-				cadastrarCliente(cpf, nome, data, celular);
+				cadastrarCliente(cpf, nome, data, cadastrarCelular(celular));
 
 			}
 			default:
@@ -110,7 +111,7 @@ public class Program {
 	}
 	
 
-	private static void cadastrarCliente(String cpf, String nome, LocalDate dataNascimento, String celular) {
+	private static void cadastrarCliente(String cpf, String nome, LocalDate dataNascimento, Integer celular) {
 
 		/*
 		 * Period.between: Calcula o período entre a data de nascimento e a data atual.
@@ -125,15 +126,22 @@ public class Program {
 		if (idade > 17) {
 			
 			Endereco end = new Endereco(11, null, null, null, null, null);//teste
-			Celular cel = new Celular(2, null);//teste
+			Celular cel = new Celular(celular, null);
 			
 			ClienteDAO clienteDao = FabricaDAO.criarClienteDAO();
-			Cliente novoCliente = new Cliente(cpf, nome, dataNascimento, end, cel);
+			Cliente novoCliente = new Cliente(cpf, nome, dataNascimento, end, cel); //tratar exceção: "Erro! Já existe cliente com CPF:" pois ela finaliza o programa 
 			clienteDao.inserir(novoCliente);
-			System.out.println("\nInserido! Novo ID = " + novoCliente.getCPF());
+			System.out.println("\nCliente inserido! Novo ID = " + novoCliente.getCPF());
 		} else {
 			System.out.println("Idade inapropriada! Necessita de um responsável para efetuar o cadastro!");
 		}
 	}
 
+	private static Integer cadastrarCelular(String numero) {
+		CelularDAO celularDao = FabricaDAO.criarCelularDAO();
+		Celular novoCelular = new Celular(null, numero);
+		celularDao.inserir(novoCelular);
+		System.out.println("\nCelular inserido! Novo ID = " + novoCelular.getId());
+		return novoCelular.getId();
+	}
 }
