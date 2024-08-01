@@ -11,6 +11,7 @@ public interface ClienteDAO {
 	void deletarPorId(Integer id);
 	Cliente encontrarPorCPF(String cpf);
 	Cliente encontrarPorIdParaAtualizar(String id);
+	boolean clienteExistente(String cpf);
 	List<Cliente> acharTodos();
 	
 }

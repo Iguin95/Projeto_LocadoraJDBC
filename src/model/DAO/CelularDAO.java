@@ -10,6 +10,8 @@ public interface CelularDAO {
 	void deletarPorId(Integer id);
 	Celular encontrarPorId(Integer id);
 	Celular encontrarPorIdParaAtualizar(Integer id); //Método útil para atualização no DB
+	boolean existe(Celular obj);
+	Celular buscarCelularExistente(String numero);
 	List<Celular> acharTodos();
 
 }

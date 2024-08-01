@@ -11,6 +11,8 @@ public interface EstadoDAO {
 	void deletarPorId(Integer id);
 	Estado encontrarPorId(Integer id);
 	Estado encontrarPorIdParaAtualizar(Integer id);
+	boolean existe(Estado obj);
+	Estado buscarEstadoExistente(String nome);
 	List<Estado> acharTodos();
 
 }

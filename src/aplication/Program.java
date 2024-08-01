@@ -8,16 +8,21 @@ import java.time.format.DateTimeParseException;
 import java.util.Locale;
 import java.util.Scanner;
 
+
 import entity.Celular;
+import entity.Cidade;
 import entity.Cliente;
 import entity.Endereco;
+import entity.Estado;
 import model.DAO.CelularDAO;
+import model.DAO.CidadeDAO;
 import model.DAO.ClienteDAO;
+import model.DAO.EnderecoDAO;
+import model.DAO.EstadoDAO;
 import model.DAO.FabricaDAO;
 
 public class Program {
-	
-	
+		
 	private static final int CADASTRAR_CLIENTE = 1;
 	private static final int CADASTRAR_FILME = 2;
 	private static final int VENDA_ALUGUEL = 3;
@@ -26,14 +31,20 @@ public class Program {
 	private static final int CONSULTAR_ID = 6;
 	private static final int SAIR = 0;
 
-	// fazer opções para consultar cidade, estado, celular e endereço
+	// fazer opções para consultar cidade, estado, celular, endereço e voltar ao menu principal
 
 	public static void main(String[] args) {
 
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
+		
 		DateTimeFormatter dmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
 		Cliente cliente = null;
+		Cidade cid = null;
+		Endereco end = null;
+		Estado est = null;
+		Celular cel = null;
 
 		System.out.println("--Sistema Locadora de Filmes IgaraTexas--");
 		System.out.println("______________________________________________");
@@ -45,7 +56,7 @@ public class Program {
 			System.out.println(" 1 - Cadastro de cliente;\n " + "2 - Cadastro de filme;\n "
 					+ "3 - Venda ou Aluguel de filme;\n " + "4 - Consultar filme;\n " + "5 - Listar clientes;\n "
 					+ "6 - Consultar cliente;\n " + "0 - Sair\n");
-			System.out.println("Digite a opção desejada: ");
+			System.out.print("Digite a opção desejada: ");
 			opcaoMenu = sc.nextInt();
 			sc.nextLine();
 			switch (opcaoMenu) {
@@ -58,7 +69,11 @@ public class Program {
 					System.out.print("Insira o CPF: ");
 					cpf = sc.nextLine();
 					if (Cliente.validarCPF(cpf) == true) {
-						validarCPF = true;
+						if(cpfExistente(cpf) == true) {
+							validarCPF = true;
+						}else {
+							System.out.println("CPF existente!");
+						}
 					} else {
 						System.out.println("CPF inválido!");
 					}
@@ -93,11 +108,70 @@ public class Program {
 					System.out.print("Insira o número de celular para contato: ");
 					celular = sc.nextLine();
 					if (Celular.validarNumero(celular) == true) {
-						validarCelular = true;
+						if(cadastrarCelular(celular) != null) {
+							validarCelular = true;
+						}else {
+							System.out.println("Celular existente!");
+						}
 					}
 				}
-
-				cadastrarCliente(cpf, nome, data, cadastrarCelular(celular));
+				
+				cel = cadastrarCelular(celular);
+				
+				String estado = null;
+				boolean validarUf = false;
+				while(!validarUf) {
+					System.out.print("Insira o UF da cidade: ");
+					estado = sc.nextLine();
+					if(cadastrarEstado(estado) != null) {
+						validarUf = true;
+					}else {
+						System.out.println("Estado existente!");
+					}
+				}
+				
+				est = cadastrarEstado(estado);
+				
+				String cidade = null;
+				String cep = null;
+				boolean validarCidade = false;
+				while(!validarCidade) {
+					System.out.print("Insira a cidade de residência: ");
+					cidade = sc.nextLine();
+					System.out.print("Insira o CEP da cidade: ");
+					cep = sc.nextLine();
+					if(cadastrarCidade(cidade, cep, est) != null) {
+						validarCidade = true;
+					}else {
+						System.out.println("Cidade existente!");
+					}
+				}
+				cid = cadastrarCidade(cidade, cep, est);
+				
+				String rua = null;
+				String bairro = null;
+				String numero = null;
+				String complemento = null;
+				boolean validarEndereco = false;
+				while(!validarEndereco) {
+					System.out.print("--Endereço--\nInsira a rua: ");
+					rua = sc.nextLine();
+					System.out.print("Insira o bairro: ");
+					bairro = sc.nextLine();
+					System.out.print("Insira o número da casa/apartamento: ");
+					numero = sc.nextLine();
+					System.out.print("Insira o complemento(casa/apartamento): ");
+					complemento = sc.nextLine();
+					if(cadastrarEndereco(rua, bairro, complemento, numero, cid) != null) {
+						validarEndereco = true;
+					}else {
+						System.out.println("Endereço existente!");
+					}
+				}
+				
+				end = cadastrarEndereco(rua, bairro, complemento, numero, cid);
+				
+				cadastrarCliente(cpf, nome, data, cel,end);
 
 			}
 			default:
@@ -110,8 +184,13 @@ public class Program {
 		sc.close();
 	}
 	
-
-	private static void cadastrarCliente(String cpf, String nome, LocalDate dataNascimento, Integer celular) {
+	static ClienteDAO clienteDao = FabricaDAO.criarClienteDAO();
+	static CelularDAO celularDao = FabricaDAO.criarCelularDAO();
+	static EstadoDAO estadoDao = FabricaDAO.criarEstadoDAO();
+	static CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
+	static EnderecoDAO enderecoDao = FabricaDAO.criarEnderecoDAO();
+	
+	private static void cadastrarCliente(String cpf, String nome, LocalDate dataNascimento, Celular celular, Endereco endereco) {
 
 		/*
 		 * Period.between: Calcula o período entre a data de nascimento e a data atual.
@@ -125,23 +204,72 @@ public class Program {
 		
 		if (idade > 17) {
 			
-			Endereco end = new Endereco(11, null, null, null, null, null);//teste
-			Celular cel = new Celular(celular, null);
+			Celular cel = new Celular(celular.getId(), null);
+			Endereco end = new Endereco(endereco.getId(), null, null, null, null, null);
 			
-			ClienteDAO clienteDao = FabricaDAO.criarClienteDAO();
-			Cliente novoCliente = new Cliente(cpf, nome, dataNascimento, end, cel); //tratar exceção: "Erro! Já existe cliente com CPF:" pois ela finaliza o programa 
+			clienteDao = FabricaDAO.criarClienteDAO();
+			Cliente novoCliente = new Cliente(cpf, nome, dataNascimento, end, cel);
 			clienteDao.inserir(novoCliente);
 			System.out.println("\nCliente inserido! Novo ID = " + novoCliente.getCPF());
 		} else {
 			System.out.println("Idade inapropriada! Necessita de um responsável para efetuar o cadastro!");
 		}
 	}
+	
+	private static boolean cpfExistente(String cpf) {
+		if(clienteDao.clienteExistente(cpf) != true) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
-	private static Integer cadastrarCelular(String numero) {
-		CelularDAO celularDao = FabricaDAO.criarCelularDAO();
+	private static Celular cadastrarCelular(String numero) {
+		celularDao = FabricaDAO.criarCelularDAO();
 		Celular novoCelular = new Celular(null, numero);
-		celularDao.inserir(novoCelular);
-		System.out.println("\nCelular inserido! Novo ID = " + novoCelular.getId());
-		return novoCelular.getId();
+		if(!celularDao.existe(novoCelular)) {
+			celularDao.inserir(novoCelular);
+			System.out.println("\nCelular inserido! Novo ID = " + novoCelular.getId());
+			return novoCelular;
+		}else {
+			return celularDao.buscarCelularExistente(numero);
+		}
+		
+	}
+	
+	private static Estado cadastrarEstado(String estado) {
+		estadoDao = FabricaDAO.criarEstadoDAO();
+		Estado novoEstado = new Estado(null, estado);
+		if(!estadoDao.existe(novoEstado)) {
+			estadoDao.inserir(novoEstado);
+			System.out.println("\nEstado inserido! Novo ID = " + novoEstado.getId());
+			return novoEstado;
+		}else {
+			return estadoDao.buscarEstadoExistente(estado);
+		}
+	}
+	
+	private static Cidade cadastrarCidade(String cidade, String cep, Estado uf) {
+		cidadeDao = FabricaDAO.criarCidadeDAO();
+		Cidade novaCidade = new Cidade(null, cidade, cep, uf);
+		if(!cidadeDao.existe(novaCidade)) {
+			cidadeDao.inserir(novaCidade);
+			System.out.println("\nCidade inserida! Novo ID = " + novaCidade.getId());
+			return novaCidade;
+		}else {
+			return cidadeDao.buscarCidadeExistente(cidade, cep, uf);
+		}
+	}
+	
+	private static Endereco cadastrarEndereco(String rua, String bairro, String complemento, String numero, Cidade cidade) {
+		enderecoDao = FabricaDAO.criarEnderecoDAO();
+		Endereco novoEndereco = new Endereco(null, cidade, rua, bairro, numero, complemento);
+		if(!enderecoDao.existe(novoEndereco)) {
+			enderecoDao.inserir(novoEndereco);
+			System.out.println("\nEndereço inserido! Novo ID = " + novoEndereco.getId());
+			return novoEndereco;
+		}else {
+			return enderecoDao.buscarEnderecoExistente(rua, bairro, numero, complemento, cidade);
+		}
 	}
 }

@@ -13,6 +13,7 @@ import data_base.ExcecaoDataBase;
 import data_base.ExcecaoIntegridadeDB;
 import entity.Celular;
 import entity.Cliente;
+import entity.Estado;
 import model.DAO.CelularDAO;
 
 public class CelularDAO_JDBC implements CelularDAO{
@@ -185,6 +186,45 @@ public class CelularDAO_JDBC implements CelularDAO{
 			ConexaoDB.FecharResultSet(rs);
 		}
 	}
+	
+	@Override
+	public boolean existe(Celular obj) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = conn.prepareStatement(
+                "SELECT 1 FROM celular WHERE numeroCelular = ?"
+            );
+            ps.setString(1, obj.getNumero());
+            rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new ExcecaoDataBase(e.getMessage());
+        } finally {
+            ConexaoDB.FecharStatement(ps);
+            ConexaoDB.FecharResultSet(rs);
+        }
+    }
+	
+	@Override
+	public Celular buscarCelularExistente(String numero) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement("SELECT * FROM celular WHERE numeroCelular = ?");
+			ps.setString(1, numero);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				return new Celular(rs.getInt("id"), rs.getString("numeroCelular"));
+			}
+			return null;
+		} catch (SQLException e) {
+			throw new RuntimeException(e.getMessage());
+		} finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
+	}
 
 	
 	private Cliente instanciandoCliente(ResultSet rs) throws SQLException {
@@ -199,7 +239,5 @@ public class CelularDAO_JDBC implements CelularDAO{
 		cel.setCliente(cli);
 		return cel;
 	}
-
-	
 
 }

@@ -16,10 +16,10 @@ import entity.Endereco;
 import entity.Estado;
 import model.DAO.EnderecoDAO;
 
-public class EnderecoDAO_JDBC implements EnderecoDAO{
-	
+public class EnderecoDAO_JDBC implements EnderecoDAO {
+
 	private Connection conn;
-	
+
 	public EnderecoDAO_JDBC(Connection conn) {
 		this.conn = conn;
 	}
@@ -28,89 +28,78 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 	public void inserir(Endereco obj) {
 		PreparedStatement ps = null;
 		try {
-			ps = conn.prepareStatement(
-					"insert into endereco "
-					+ "(rua, bairro, numeroCasa, complemento, id_Cidade) "
-					+ "values "
-					+ "(?, ?, ?, ?, ?) ",
-					Statement.RETURN_GENERATED_KEYS
-					);
+			ps = conn.prepareStatement("insert into endereco " + "(rua, bairro, numeroCasa, complemento, id_Cidade) "
+					+ "values " + "(?, ?, ?, ?, ?) ", Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, obj.getRua());
 			ps.setString(2, obj.getBairro());
 			ps.setString(3, obj.getNumero());
 			ps.setString(4, obj.getComplemento());
 			ps.setInt(5, obj.getCidade().getId());
-			
+
 			int linhasAfetadas = ps.executeUpdate();
-			
-			if(linhasAfetadas > 0) {
+
+			if (linhasAfetadas > 0) {
 				ResultSet rs = ps.getGeneratedKeys();
-				if(rs.next()) {
+				if (rs.next()) {
 					int id = rs.getInt(1);
 					obj.setId(id);
 				}
-				ConexaoDB.FecharResultSet(rs);		
-			}else {
+				ConexaoDB.FecharResultSet(rs);
+			} else {
 				throw new ExcecaoDataBase("Erro inesperado! Nenhuma linha foi afetada");
 			}
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new ExcecaoDataBase(e.getMessage());
-		}finally {
+		} finally {
 			ConexaoDB.FecharStatement(ps);
 		}
-		
+
 	}
 
 	@Override
 	public void atualizar(Endereco obj) {
 		PreparedStatement ps = null;
 		try {
-			ps = conn.prepareStatement(
-					"update endereco "
-					+ "set rua = ?, bairro = ?, numeroCasa = ?, complemento = ?, id_Cidade = ? "
-					+ "where id = ? "
-					);
+			ps = conn.prepareStatement("update endereco "
+					+ "set rua = ?, bairro = ?, numeroCasa = ?, complemento = ?, id_Cidade = ? " + "where id = ? ");
 			ps.setString(1, obj.getRua());
 			ps.setString(2, obj.getBairro());
 			ps.setString(3, obj.getNumero());
 			ps.setString(4, obj.getComplemento());
 			ps.setInt(5, obj.getCidade().getId());
 			ps.setInt(6, obj.getId());
-			
+
 			ps.executeUpdate();
-					
-		}catch(SQLException e) {
+
+		} catch (SQLException e) {
 			throw new ExcecaoDataBase(e.getMessage());
-		}finally {
+		} finally {
 			ConexaoDB.FecharStatement(ps);
-		}	
+		}
 	}
-	
 
 	@Override
 	public Endereco encontrarPorIdParaAtualizar(Integer id) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = conn.prepareStatement(
-					"select * from endereco where endereco.id = ?"
-					);
+			ps = conn.prepareStatement("select * from endereco where endereco.id = ?");
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
-			
-			if(rs.next()) {	
+
+			if (rs.next()) {
 				Cidade cid = new Cidade();
 				cid.setId(rs.getInt("id_Cidade"));
-				
+
 				Endereco end = new Endereco();
-				end.setId(rs.getInt("endereco.id"));	
-				
+				end.setId(rs.getInt("endereco.id"));
+
 				return end;
 			}
 			return null;
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new ExcecaoDataBase(e.getMessage());
-		}finally {
+		} finally {
 			ConexaoDB.FecharStatement(ps);
 			ConexaoDB.FecharResultSet(rs);
 		}
@@ -120,19 +109,16 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 	public void deletarPorId(Integer id) {
 		PreparedStatement ps = null;
 		try {
-			ps = conn.prepareStatement(
-					"delete from endereco "
-					+ "where id = ? "
-					);
+			ps = conn.prepareStatement("delete from endereco " + "where id = ? ");
 			ps.setInt(1, id);
 			int rows = ps.executeUpdate();
-			
-			if(rows == 0) {
+
+			if (rows == 0) {
 				throw new ExcecaoDataBase("Id Inexistente!");
 			}
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new ExcecaoIntegridadeDB(e.getMessage());
-		}	
+		}
 	}
 
 	@Override
@@ -141,31 +127,30 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement(
-					"select endereco.id, endereco.rua, endereco.bairro, endereco.numeroCasa, endereco.complemento, " 
-					+ "cidade.nome_cidade, cidade.cep, estado.nome_estado "
-					+ "from endereco join cidade on cidade.id = endereco.id_Cidade "
-					+ "join estado on estado.id = cidade.estado_da_cidade "
-					+ "where endereco.id = ?");
-			
+					"select endereco.id, endereco.rua, endereco.bairro, endereco.numeroCasa, endereco.complemento, "
+							+ "cidade.nome_cidade, cidade.cep, estado.nome_estado "
+							+ "from endereco join cidade on cidade.id = endereco.id_Cidade "
+							+ "join estado on estado.id = cidade.estado_da_cidade " + "where endereco.id = ?");
+
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				Endereco end = instanciandoEndereco(rs);
-				
+
 				Cidade cid = instanciandoCidade(rs);
-				
+
 				Estado est = instanciandoEstado(rs);
-				
+
 				cid.setUf(est);
 				end.setCidade(cid);
-				
+
 				return end;
 			}
 			return null;
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new ExcecaoDataBase(e.getMessage());
-		}finally {
+		} finally {
 			ConexaoDB.FecharStatement(ps);
 			ConexaoDB.FecharResultSet(rs);
 		}
@@ -177,36 +162,91 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement(
-					"select endereco.id, endereco.rua, endereco.bairro, endereco.numeroCasa, endereco.complemento, " 
-					+ "cidade.nome_cidade, cidade.cep, estado.nome_estado "
-					+ "from endereco join cidade on cidade.id = endereco.id_Cidade "
-					+ "join estado on estado.id = cidade.estado_da_cidade "
-					+ "order by cidade.nome_cidade "
-					);
-			
+					"select endereco.id, endereco.rua, endereco.bairro, endereco.numeroCasa, endereco.complemento, "
+							+ "cidade.nome_cidade, cidade.cep, estado.nome_estado "
+							+ "from endereco join cidade on cidade.id = endereco.id_Cidade "
+							+ "join estado on estado.id = cidade.estado_da_cidade " + "order by cidade.nome_cidade ");
+
 			rs = ps.executeQuery();
 			List<Endereco> list = new ArrayList<>();
-			while(rs.next()) {
+			while (rs.next()) {
 				Endereco end = instanciandoEndereco(rs);
-				
+
 				Cidade cid = instanciandoCidade(rs);
-				
+
 				Estado est = instanciandoEstado(rs);
-				
+
 				cid.setUf(est);
 				end.setCidade(cid);
-				
+
 				list.add(end);
 			}
 			return list;
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new ExcecaoDataBase(e.getMessage());
-		}finally {
+		} finally {
 			ConexaoDB.FecharStatement(ps);
 			ConexaoDB.FecharResultSet(rs);
 		}
 	}
-	
+
+	@Override
+	public boolean existe(Endereco obj) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"SELECT 1 FROM endereco WHERE rua = ? "
+					+ "AND bairro = ? AND numeroCasa = ? "
+					+ "AND complemento = ? AND id_Cidade = ?"
+					);
+			ps.setString(1, obj.getRua());
+			ps.setString(2, obj.getBairro());
+			ps.setString(3, obj.getNumero());
+			ps.setString(4, obj.getComplemento());
+			ps.setInt(5, obj.getCidade().getId());
+			rs = ps.executeQuery();
+			return rs.next();
+
+		} catch (SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		} finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
+	}
+
+	@Override
+	public Endereco buscarEnderecoExistente(String rua, String bairro, String numero, String complemento, Cidade cidade) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"SELECT * FROM endereco WHERE rua = ? "
+					+ "AND bairro = ? AND numeroCasa = ? "
+					+ "AND complemento = ? AND id_Cidade = ?"
+					);
+			ps.setString(1, rua);
+			ps.setString(2, bairro);
+			ps.setString(3, numero);
+			ps.setString(4, complemento);
+			ps.setInt(5, cidade.getId());
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				Cidade cidadeRetornada = new Cidade(rs.getInt("id_Cidade"), null, null, null);
+				
+				return new Endereco(rs.getInt("id"), cidadeRetornada, rs.getString("rua"),
+						rs.getString("bairro"), rs.getString("numeroCasa"), rs.getString("complemento"));
+			}
+			return null;
+		} catch (SQLException e) {
+			throw new RuntimeException(e.getMessage());
+		} finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
+	}
+
 	private Endereco instanciandoEndereco(ResultSet rs) throws SQLException {
 		Endereco end = new Endereco();
 		end.setRua(rs.getString("endereco.rua"));
@@ -215,7 +255,7 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 		end.setComplemento(rs.getString("endereco.complemento"));
 		return end;
 	}
-	
+
 	private Cidade instanciandoCidade(ResultSet rs) throws SQLException {
 		Cidade cid = new Cidade();
 		cid.setNome(rs.getString("cidade.nome_cidade"));
@@ -228,6 +268,5 @@ public class EnderecoDAO_JDBC implements EnderecoDAO{
 		est.setNome(rs.getString("estado.nome_estado"));
 		return est;
 	}
-
 
 }

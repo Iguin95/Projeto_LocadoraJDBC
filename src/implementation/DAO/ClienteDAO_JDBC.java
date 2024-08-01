@@ -75,7 +75,8 @@ public class ClienteDAO_JDBC implements ClienteDAO {
 	}
 
 	//método para verificar se um cliente já existe
-	private boolean clienteExistente(String cpf) {
+	@Override
+	public boolean clienteExistente(String cpf) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {

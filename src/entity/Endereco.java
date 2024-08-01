@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Endereco implements Serializable {
 
@@ -81,6 +82,25 @@ public class Endereco implements Serializable {
 				+ "Bairro: " + bairro + "; \n"
 				+ "Número da casa/apartamento: " + numero + "; \n"
 				+ "Complemento: " + complemento + ";\n";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(bairro, cidade, complemento, numero, rua);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Endereco other = (Endereco) obj;
+		return Objects.equals(bairro, other.bairro) && Objects.equals(cidade, other.cidade)
+				&& Objects.equals(complemento, other.complemento) && Objects.equals(numero, other.numero)
+				&& Objects.equals(rua, other.rua);
 	}
 	
 	

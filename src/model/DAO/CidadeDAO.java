@@ -3,6 +3,7 @@ package model.DAO;
 import java.util.List;
 
 import entity.Cidade;
+import entity.Estado;
 
 public interface CidadeDAO {
 	
@@ -11,6 +12,8 @@ public interface CidadeDAO {
 	void deletarPorId(Integer id);
 	Cidade encontrarPorId(Integer id);
 	Cidade encontrarPorIdParaAtualizar(Integer id);
+	boolean existe(Cidade obj);
+	Cidade buscarCidadeExistente(String nome, String cep, Estado uf);
 	List<Cidade> acharTodos();
 
 }

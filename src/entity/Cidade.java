@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Cidade implements Serializable {
 
@@ -60,4 +61,22 @@ public class Cidade implements Serializable {
 		return "Cidade: " + nome + " - CEP: " + CEP
 				+ "(Estado = " + uf.getNome() + ")";
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(CEP, nome, uf);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cidade other = (Cidade) obj;
+		return Objects.equals(CEP, other.CEP) && Objects.equals(nome, other.nome) && Objects.equals(uf, other.uf);
+	}
+	
 }
