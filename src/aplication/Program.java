@@ -62,6 +62,29 @@ public class Program {
 			switch (opcaoMenu) {
 			case CADASTRAR_CLIENTE: {
 				System.out.println("--Cadastro de Cliente--\n");
+				
+				LocalDate data = null;
+				boolean dataValida = false;
+				
+				while (!dataValida) {
+					try {
+						System.out.print("Insira a data de nascimento(dd/MM/yyyy): ");
+						data = LocalDate.parse(sc.next(), dmt);
+						sc.nextLine();
+						
+						LocalDate dataAtual = LocalDate.now();
+						Period periodo = Period.between(data, dataAtual);
+						int idade = periodo.getYears();
+						
+						if(idade > 17) {
+							dataValida = true;
+						}else {
+							System.out.println("Idade inapropriada! Necessita de um responsável para efetuar o cadastro!");
+						}
+					} catch (DateTimeParseException e) {
+						System.out.println("Formato de data inválido! - " + e.getMessage());
+					}
+				}
 
 				boolean validarCPF = false;
 				String cpf = null;
@@ -89,18 +112,6 @@ public class Program {
 					}
 				}
 
-				LocalDate data = null;
-				boolean dataValida = false;
-				while (!dataValida) {
-					try {
-						System.out.print("Insira a data de nascimento(dd/MM/yyyy): ");
-						data = LocalDate.parse(sc.next(), dmt);
-						sc.nextLine();
-						dataValida = true;
-					} catch (DateTimeParseException e) {
-						System.out.println("Formato de data inválido! - " + e.getMessage());
-					}
-				}
 
 				boolean validarCelular = false;
 				String celular = null;
@@ -154,11 +165,11 @@ public class Program {
 				String complemento = null;
 				boolean validarEndereco = false;
 				while(!validarEndereco) {
-					System.out.print("--Endereço--\nInsira a rua: ");
+					System.out.print("--Endereço--\nInsira a rua/avenida: ");
 					rua = sc.nextLine();
 					System.out.print("Insira o bairro: ");
 					bairro = sc.nextLine();
-					System.out.print("Insira o número da casa/apartamento: ");
+					System.out.print("Insira o NÚMERO do imóvel: ");
 					numero = sc.nextLine();
 					System.out.print("Insira o complemento(casa/apartamento): ");
 					complemento = sc.nextLine();
@@ -192,18 +203,6 @@ public class Program {
 	
 	private static void cadastrarCliente(String cpf, String nome, LocalDate dataNascimento, Celular celular, Endereco endereco) {
 
-		/*
-		 * Period.between: Calcula o período entre a data de nascimento e a data atual.
-		 * O método getYears() é usado para extrair a quantidade de anos completos desse
-		 * período. LocalDate.now(): Obtém a data atual, necessária para calcular a
-		 * diferença em anos entre a data de nascimento e o presente momento.
-		 */
-		LocalDate dataAtual = LocalDate.now();
-		Period periodo = Period.between(dataNascimento, dataAtual);
-		int idade = periodo.getYears();
-		
-		if (idade > 17) {
-			
 			Celular cel = new Celular(celular.getId(), null);
 			Endereco end = new Endereco(endereco.getId(), null, null, null, null, null);
 			
@@ -211,9 +210,7 @@ public class Program {
 			Cliente novoCliente = new Cliente(cpf, nome, dataNascimento, end, cel);
 			clienteDao.inserir(novoCliente);
 			System.out.println("\nCliente inserido! Novo ID = " + novoCliente.getCPF());
-		} else {
-			System.out.println("Idade inapropriada! Necessita de um responsável para efetuar o cadastro!");
-		}
+		
 	}
 	
 	private static boolean cpfExistente(String cpf) {

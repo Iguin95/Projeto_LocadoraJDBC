@@ -13,7 +13,6 @@ import data_base.ExcecaoDataBase;
 import data_base.ExcecaoIntegridadeDB;
 import entity.Celular;
 import entity.Cliente;
-import entity.Estado;
 import model.DAO.CelularDAO;
 
 public class CelularDAO_JDBC implements CelularDAO{
