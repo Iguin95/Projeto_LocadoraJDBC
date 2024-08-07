@@ -188,7 +188,7 @@ public class Program {
 				
 				cadastrarCliente(cpf, nome, data, cel,end);
 				
-				System.out.println(cliente);
+				break;
 
 			}
 			
@@ -211,6 +211,8 @@ public class Program {
 				sc.nextLine();
 				
 				cadastrarFilme(nomeFilme, classificacao, anoLancamento, preco);
+				
+				break;
 			}
 			
 			default:
@@ -241,7 +243,6 @@ public class Program {
 			Celular cel = new Celular(celular.getId(), null);
 			Endereco end = new Endereco(endereco.getId(), null, null, null, null, null);
 			
-			clienteDao = FabricaDAO.criarClienteDAO();
 			Cliente novoCliente = new Cliente(cpf, nome, dataNascimento, end, cel);
 			clienteDao.inserir(novoCliente);
 			System.out.println("\nCliente inserido! Novo ID = " + novoCliente.getCPF());
@@ -257,7 +258,6 @@ public class Program {
 	}
 
 	private static Celular cadastrarCelular(String numero) {
-		celularDao = FabricaDAO.criarCelularDAO();
 		Celular novoCelular = new Celular(null, numero);
 		if(!celularDao.existe(novoCelular)) {
 			celularDao.inserir(novoCelular);
@@ -270,7 +270,6 @@ public class Program {
 	}
 	
 	private static Estado cadastrarEstado(String estado) {
-		estadoDao = FabricaDAO.criarEstadoDAO();
 		Estado novoEstado = new Estado(null, estado);
 		if(!estadoDao.existe(novoEstado)) {
 			estadoDao.inserir(novoEstado);
@@ -282,7 +281,6 @@ public class Program {
 	}
 	
 	private static Cidade cadastrarCidade(String cidade, String cep, Estado uf) {
-		cidadeDao = FabricaDAO.criarCidadeDAO();
 		Cidade novaCidade = new Cidade(null, cidade, cep, uf);
 		if(!cidadeDao.existe(novaCidade)) {
 			cidadeDao.inserir(novaCidade);
@@ -294,7 +292,6 @@ public class Program {
 	}
 	
 	private static Endereco cadastrarEndereco(String rua, String bairro, String complemento, String numero, Cidade cidade) {
-		enderecoDao = FabricaDAO.criarEnderecoDAO();
 		Endereco novoEndereco = new Endereco(null, cidade, rua, bairro, numero, complemento);
 		if(!enderecoDao.existe(novoEndereco)) {
 			enderecoDao.inserir(novoEndereco);
