@@ -14,12 +14,14 @@ import entity.Cidade;
 import entity.Cliente;
 import entity.Endereco;
 import entity.Estado;
+import entity.Filme;
 import model.DAO.CelularDAO;
 import model.DAO.CidadeDAO;
 import model.DAO.ClienteDAO;
 import model.DAO.EnderecoDAO;
 import model.DAO.EstadoDAO;
 import model.DAO.FabricaDAO;
+import model.DAO.FilmeDAO;
 
 public class Program {
 		
@@ -56,11 +58,13 @@ public class Program {
 			System.out.println(" 1 - Cadastro de cliente;\n " + "2 - Cadastro de filme;\n "
 					+ "3 - Venda ou Aluguel de filme;\n " + "4 - Consultar filme;\n " + "5 - Listar clientes;\n "
 					+ "6 - Consultar cliente;\n " + "0 - Sair\n");
+			
 			System.out.print("Digite a opção desejada: ");
 			opcaoMenu = sc.nextInt();
 			sc.nextLine();
 			switch (opcaoMenu) {
-			case CADASTRAR_CLIENTE: {
+			
+			case CADASTRAR_CLIENTE : {
 				System.out.println("--Cadastro de Cliente--\n");
 				
 				LocalDate data = null;
@@ -183,14 +187,38 @@ public class Program {
 				end = cadastrarEndereco(rua, bairro, complemento, numero, cid);
 				
 				cadastrarCliente(cpf, nome, data, cel,end);
+				
+				System.out.println(cliente);
 
 			}
+			
+			case CADASTRAR_FILME : {
+				System.out.println("--Cadastro de Filme--\n");
+				
+				System.out.print("Insira o nome do filme: ");
+				String nomeFilme = sc.nextLine();
+				
+				System.out.print("Insira a Classificação indicativa do filme (0/10/12/16/18): ");
+				Integer classificacao = sc.nextInt();
+				sc.nextLine();
+				
+				System.out.print("Insira o ano de lançamento do filme: ");
+				Integer anoLancamento = sc.nextInt();
+				sc.nextLine();
+				
+				System.out.print("Insira o preço(Total) do filme: ");
+				Double preco = sc.nextDouble();
+				sc.nextLine();
+				
+				cadastrarFilme(nomeFilme, classificacao, anoLancamento, preco);
+			}
+			
 			default:
 				// throw new IllegalArgumentException("Entrada inesperada: " + op);
 			}
 		}
 
-		System.out.println(cliente);
+		
 
 		sc.close();
 	}
@@ -200,6 +228,13 @@ public class Program {
 	static EstadoDAO estadoDao = FabricaDAO.criarEstadoDAO();
 	static CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
 	static EnderecoDAO enderecoDao = FabricaDAO.criarEnderecoDAO();
+	static FilmeDAO filmeDao = FabricaDAO.criarFilmeDAO();
+	
+	private static void cadastrarFilme(String nome, Integer classificacao, Integer ano, Double preco) {
+		Filme novoFilme = new Filme(null, nome, classificacao, ano, preco);
+		filmeDao.inserir(novoFilme);
+		System.out.println("\nFilme inserido! Novo ID = " + novoFilme.getId());
+	}
 	
 	private static void cadastrarCliente(String cpf, String nome, LocalDate dataNascimento, Celular celular, Endereco endereco) {
 
@@ -269,4 +304,8 @@ public class Program {
 			return enderecoDao.buscarEnderecoExistente(rua, bairro, numero, complemento, cidade);
 		}
 	}
+
+
+
 }
+
