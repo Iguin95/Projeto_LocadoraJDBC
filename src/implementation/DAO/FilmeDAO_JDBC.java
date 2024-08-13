@@ -156,6 +156,47 @@ public class FilmeDAO_JDBC implements FilmeDAO{
 		}
 		
 	}
+	
+	@Override
+    public List<Filme> buscarPorNome(String nome) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Filme> filmes = new ArrayList<>();
+
+        try {
+            // Usando COLLATE para ignorar case e accents
+            ps = conn.prepareStatement(
+            		"SELECT * FROM filme WHERE nome_filme COLLATE utf8mb4_unicode_ci LIKE ?"
+            		);
+            ps.setString(1, "%" + nome + "%");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Filme filme = new Filme();
+                filme.setId(rs.getInt("id"));
+                filme.setNome(rs.getString("nome_filme"));
+                filme.setClassificacao(rs.getInt("classificacao"));
+                filme.setAno(rs.getInt("ano"));
+                filme.setPreco(rs.getDouble("preco"));
+                
+                filmes.add(filme);
+            }
+            
+            /*Explicação: COLLATE utf8mb4_unicode_ci: O COLLATE é usado para especificar uma collation (ordenação) 
+             * que ignora diferenças de acentuação e caixa alta/baixa. O utf8mb4_unicode_ci é uma collation do MySQL 
+             * que faz exatamente isso. O ci significa case insensitive (insensível a maiúsculas e minúsculas).
+             * LIKE: A função LIKE no SQL realiza a busca por padrões, e o uso de % ao redor da variável nome permite 
+             * que sejam encontrados todos os registros que contenham a string, independentemente da posição.*/
+            
+        } catch (SQLException e) {
+            throw new ExcecaoDataBase(e.getMessage());
+        } finally {
+            ConexaoDB.FecharStatement(ps);
+            ConexaoDB.FecharResultSet(rs);
+        }
+
+        return filmes;
+    }
 
 	@Override
 	public List<Filme> acharTodos() {

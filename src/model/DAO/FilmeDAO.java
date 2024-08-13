@@ -11,6 +11,7 @@ public interface FilmeDAO {
 	void deletarPorId(Integer id);
 	Filme encontrarPorId(Integer id);
 	Filme encontrarPorIdParaAtualizar(Integer id);
+	List<Filme> buscarPorNome(String nome);
 	List<Filme> acharTodos();
 
 }
