@@ -172,12 +172,12 @@ public class FilmeDAO_JDBC implements FilmeDAO{
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                Filme filme = new Filme();
-                filme.setId(rs.getInt("id"));
+                Filme filme = instanciandoFilme(rs);
+                /*filme.setId(rs.getInt("id"));
                 filme.setNome(rs.getString("nome_filme"));
                 filme.setClassificacao(rs.getInt("classificacao"));
                 filme.setAno(rs.getInt("ano"));
-                filme.setPreco(rs.getDouble("preco"));
+                filme.setPreco(rs.getDouble("preco"));*/
                 
                 filmes.add(filme);
             }

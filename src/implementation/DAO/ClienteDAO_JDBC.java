@@ -190,7 +190,8 @@ public class ClienteDAO_JDBC implements ClienteDAO {
 					+ "from cliente join endereco on endereco.id = cliente.endereco_cliente "
 					+ "join celular on celular.id = cliente.celular_cliente "
 					+ "join cidade on cidade.id = endereco.id_Cidade "
-					+ "join estado on estado.id = cidade.estado_da_cidade " + "where CPF = ?"
+					+ "join estado on estado.id = cidade.estado_da_cidade "
+					+ "where CPF = ?"
 					);
 
 			ps.setString(1, cpf);
@@ -216,6 +217,43 @@ public class ClienteDAO_JDBC implements ClienteDAO {
 		}
 	}
 	
+	@Override
+    public List<Cliente> buscarPorNome(String nome) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Cliente> clientes = new ArrayList<>();
+
+        try {
+            ps = conn.prepareStatement(
+            		 "SELECT cliente.*, endereco.*, cidade.*, estado.*, celular.* " 
+            		+ "FROM cliente "
+            		+ "INNER JOIN endereco ON cliente.endereco_cliente = endereco.id "
+            		+ "INNER JOIN cidade ON endereco.id_Cidade = cidade.id "
+            		+ "INNER JOIN estado ON cidade.estado_da_cidade = estado.id "
+            		+ "LEFT JOIN celular ON cliente.celular_cliente = celular.id "
+            		+ "WHERE cliente.nome COLLATE utf8mb4_unicode_ci LIKE ? "
+            		);
+            ps.setString(1, "%" + nome + "%");
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+            	Estado est = instanciandoEstado(rs);
+            	Cidade cid = instanciandoCidade(rs, est);
+            	Endereco end = instanciandoEndereco(rs, cid);
+            	Celular celular = instanciandoCelular(rs);
+                Cliente cliente = instanciandoCliente(rs, celular, end);
+                   
+                clientes.add(cliente);
+            }            
+        } catch (SQLException e) {
+            throw new ExcecaoDataBase(e.getMessage());
+        } finally {
+            ConexaoDB.FecharStatement(ps);
+            ConexaoDB.FecharResultSet(rs);
+        }
+
+        return clientes;
+    }
 
 	@Override
 	public List<Cliente> acharTodos() {

@@ -28,8 +28,7 @@ public class Program {
 	private static final int CADASTRAR_FILME = 2;
 	private static final int VENDA_ALUGUEL = 3;
 	private static final int CONSULTAR_FILME = 4;
-	private static final int LISTAR_CLIENTE = 0;
-	private static final int CONSULTAR_ID = 0;
+	private static final int CONSULTAR_CLIENTE = 5;
 	private static final int SAIR = 0;
 
 	// fazer opções para consultar cidade, estado, celular, endereço e voltar ao
@@ -57,7 +56,7 @@ public class Program {
 			System.out.println("--------Menu--------\n");
 			System.out.println(" 1 - Cadastro de cliente;\n " + "2 - Cadastro de filme;\n "
 					+ "3 - Venda ou Aluguel de filme;\n " + "4 - Consultar filme;\n "
-					+ " - Listar todos os clientes;\n " + " - Consultar cliente;\n " + "0 - Sair\n");
+					+ "5 - Consultar cliente ;\n " + "0 - Sair\n");
 
 			System.out.print("Digite a opção desejada: ");
 			opcaoMenu = sc.nextInt();
@@ -222,10 +221,10 @@ public class Program {
 
 				int opFilme = 5;
 
-				System.out.println("\n--MENU--\n" + "1 - Consultar filme por id;\n2 - Consultar filme por nome;\n"
-						+ "3 - Listar todos os filmes;\n4 - Voltar\n");
-
 				while (opFilme != VOLTAR) {
+					System.out.println("\n--MENU--\n"
+							+ "1 - Consultar filme por id;\n2 - Consultar filme por nome;\n"
+							+ "3 - Listar todos os filmes;\n4 - Voltar");
 					System.out.print("\nDigite a opção desejada('4' para voltar): ");
 					opFilme = sc.nextInt();
 					sc.nextLine();
@@ -248,6 +247,48 @@ public class Program {
 						break;
 					}
 					}
+				}
+			}
+			case CONSULTAR_CLIENTE: {
+				final int CONSULTAR_CLIENTE_POR_CPF = 1;
+				final int COSULTAR_CLIENTE_POR_NOME = 2;
+				final int LISTAR_CLIENTES = 3;
+				final int VOLTAR = 4;
+
+				int opCliente = 5;
+				
+				while (opCliente != VOLTAR) {
+					System.out.println("\n--MENU--\n" 
+							+ "1 - Consultar cliente por CPF;\n2 - Consultar cliente por nome;\n"
+							+ "3 - Listar todos os clientes;\n4 - Voltar");
+					System.out.print("\nDigite a opção desejada('4' para voltar): ");
+					opCliente = sc.nextInt();
+					sc.nextLine();
+					switch (opCliente) {
+					case CONSULTAR_CLIENTE_POR_CPF : {
+						System.out.print("Escreva o CPF do cliente: ");
+						String cpf = sc.nextLine();
+						Cliente existeCPF = buscarClientePorCPF(cpf);
+						if(existeCPF != null) {
+							buscarClientePorCPF(cpf);
+						}else {
+							System.out.println("CPF inexistente no banco de dados!");
+						}
+						break;
+					}
+					case COSULTAR_CLIENTE_POR_NOME : {
+						System.out.print("Escreva o nome do cliente: ");
+						String nome = sc.nextLine();
+						System.out.println();
+						buscarClientePorNome(nome);
+						break;
+					}
+					case LISTAR_CLIENTES : {
+						listarTodosClientes();
+						break;
+					}
+					}
+						
 				}
 			}
 
@@ -348,18 +389,49 @@ public class Program {
 
 	private static List<Filme> buscarFilmePorNome(String nome) {
 		List<Filme> filmes = filmeDao.buscarPorNome(nome);
-		for (Filme filme : filmes) {
-			System.out.println(filme);
-			return filmes;
+		if(filmes.isEmpty()) {
+			System.out.println("Nenhum cliente encontrado com o nome: " + nome);
+		}else {
+			for (Filme filme : filmes) {
+				System.out.println(filme);
+			}
 		}
-		return null;
+		
+		return filmes;
 	}
 
 	private static List<Filme> listarTodosFilmes() {
 		List<Filme> filmes = filmeDao.acharTodos();
 		for (Filme filme : filmes) {
-			System.out.println(filme.getNome());
+			System.out.println(filme.getNome() + "-" + filme.getClassificacao());
 		}
 		return filmes;
+	}
+
+	private static List<Cliente> buscarClientePorNome(String nome){
+		List<Cliente> clientes = clienteDao.buscarPorNome(nome);
+		
+		if(clientes.isEmpty()) {
+			System.out.println("Nenhum cliente encontrado com o nome: " + nome);
+		}else {
+			for (Cliente cliente : clientes) {
+				System.out.println(cliente);
+			}
+		}
+		return clientes;
+	}
+	
+	private static Cliente buscarClientePorCPF(String cpf) {
+		Cliente cliente = clienteDao.encontrarPorCPF(cpf);
+		System.out.println(cliente);
+		return cliente;
+	}
+	
+	private static List<Cliente> listarTodosClientes(){
+		List<Cliente> clientes = clienteDao.acharTodos();
+		for (Cliente cliente : clientes) {
+			System.out.println(cliente.getCPF() + " - " + cliente.getNome());
+		}
+		return clientes;
 	}
 }

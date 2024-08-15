@@ -12,6 +12,7 @@ public interface ClienteDAO {
 	Cliente encontrarPorCPF(String cpf);
 	Cliente encontrarPorIdParaAtualizar(String id);
 	boolean clienteExistente(String cpf);
+	List<Cliente> buscarPorNome(String nome);
 	List<Cliente> acharTodos();
 	
 }
