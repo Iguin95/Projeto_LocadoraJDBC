@@ -41,7 +41,6 @@ public class Program {
 
 		DateTimeFormatter dmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-		Cliente cliente = null;
 		Cidade cid = null;
 		Endereco end = null;
 		Estado est = null;
@@ -190,7 +189,9 @@ public class Program {
 				break;
 
 			}
-
+			
+//------------------------------------------------------------------------------------------
+			
 			case CADASTRAR_FILME: {
 				System.out.println("--Cadastro de Filme--\n");
 
@@ -213,6 +214,9 @@ public class Program {
 
 				break;
 			}
+			
+//------------------------------------------------------------------------------------------
+			
 			case CONSULTAR_FILME: {
 				final int CONSULTAR_FILME_POR_ID = 1;
 				final int COSULTAR_FILME_POR_NOME = 2;
@@ -249,6 +253,9 @@ public class Program {
 					}
 				}
 			}
+			
+//------------------------------------------------------------------------------------------
+			
 			case CONSULTAR_CLIENTE: {
 				final int CONSULTAR_CLIENTE_POR_CPF = 1;
 				final int COSULTAR_CLIENTE_POR_NOME = 2;
@@ -290,6 +297,12 @@ public class Program {
 					}
 						
 				}
+			}
+			
+//------------------------------------------------------------------------------------------			
+			
+			case VENDA_ALUGUEL :{
+				
 			}
 
 			default:

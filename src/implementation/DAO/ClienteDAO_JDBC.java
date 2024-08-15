@@ -224,6 +224,7 @@ public class ClienteDAO_JDBC implements ClienteDAO {
         List<Cliente> clientes = new ArrayList<>();
 
         try {
+        	 // Ajuste a consulta SQL para incluir as tabelas relacionadas e selecione as colunas necessárias
             ps = conn.prepareStatement(
             		 "SELECT cliente.*, endereco.*, cidade.*, estado.*, celular.* " 
             		+ "FROM cliente "
