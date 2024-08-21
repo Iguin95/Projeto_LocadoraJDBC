@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,14 +27,50 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO {
 		this.conn = conn;
 	}
 
+	
+	@Override
+	public void inserirClienteComFilme(ClienteFilme obj, Cliente cliente, Filme filme) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"insert into filme_cliente "
+					+ "(idFilme, idCliente) "
+					+ "values "
+					+ "(?, ?) ",
+					Statement.RETURN_GENERATED_KEYS
+					);
+			ps.setInt(1, filme.getId());
+			ps.setString(2,	cliente.getCPF());
+			
+			int linhasAfetadas = ps.executeUpdate();
+			
+			if(linhasAfetadas > 0) {
+				rs = ps.getGeneratedKeys();
+				if(rs.next()) {
+					Integer id = rs.getInt(1);
+					obj.setId(id);
+				}
+			}
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
+	}
+	
 	@Override
 	public List<ClienteFilme> encontrarClienteComFilme(String cpf) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = conn.prepareStatement("select cliente.nome, filme.nome_filme, cliente.cpf "
+			ps = conn.prepareStatement(
+					"select cliente.nome, filme.nome_filme, cliente.cpf "
 					+ "from cliente join filme_cliente on cliente.cpf = filme_cliente.idCliente "
-					+ "join filme on filme.id = filme_cliente.idFilme " + "where cliente.cpf = ?");
+					+ "join filme on filme.id = filme_cliente.idFilme " 
+					+ "where cliente.cpf = ?"
+					);
 
 			ps.setString(1, cpf);
 			rs = ps.executeQuery();

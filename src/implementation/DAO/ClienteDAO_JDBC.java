@@ -38,7 +38,8 @@ public class ClienteDAO_JDBC implements ClienteDAO {
 				ps = conn.prepareStatement(
 						"insert into cliente "
 						+ "(cpf, nome, idade, endereco_cliente, celular_cliente) " 
-						+ "values " + "(?, ?, ?, ?, ?)",
+						+ "values "
+						+ "(?, ?, ?, ?, ?)",
 						Statement.RETURN_GENERATED_KEYS
 						);
 				

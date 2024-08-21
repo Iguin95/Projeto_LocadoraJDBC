@@ -12,8 +12,7 @@ public class ClienteFilme implements Serializable{
 	
 	//Criei a classe responsável por salvar cliente com seu filme,
 	//pois um filme existe sem um cliente e um cliente existe sem filme.
-	
-	//Crie a tabela no db também
+
 	
 	private Integer id;
 	private String idCliente;
@@ -28,8 +27,13 @@ public class ClienteFilme implements Serializable{
 	public ClienteFilme() {	
 	}
 	
+	public ClienteFilme(Integer id, String idCliente, Integer idFilme) {
+		this.id = id;
+		this.idCliente = idCliente;
+		this.idFilme = idFilme;
+	}
+
 	public ClienteFilme(Integer id, String idCliente, Integer idFilme, Filme filme, Cliente cliente) {
-		super();
 		this.id = id;
 		this.idCliente = idCliente;
 		this.idFilme = idFilme;

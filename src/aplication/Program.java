@@ -11,12 +11,14 @@ import java.util.Scanner;
 import entity.Celular;
 import entity.Cidade;
 import entity.Cliente;
+import entity.ClienteFilme;
 import entity.Endereco;
 import entity.Estado;
 import entity.Filme;
 import model.DAO.CelularDAO;
 import model.DAO.CidadeDAO;
 import model.DAO.ClienteDAO;
+import model.DAO.Cliente_FilmeDAO;
 import model.DAO.EnderecoDAO;
 import model.DAO.EstadoDAO;
 import model.DAO.FabricaDAO;
@@ -302,7 +304,41 @@ public class Program {
 //------------------------------------------------------------------------------------------			
 			
 			case VENDA_ALUGUEL : {
+				final int COMPRAR = 1;
+				final int ALUGAR = 2;
+				final int VOLTAR = 3;
 				
+				int opCompra = 4;
+				
+				while(VOLTAR != opCompra) {
+					System.out.println("\n--MENU--\n" 
+							+ "1 - Comprar filme;\n2 - Alugar filme;\n"
+							+ "3 - Voltar");
+					System.out.print("\nDigite a opção desejada('3' para voltar): ");
+					opCompra = sc.nextInt();
+					sc.nextLine();
+					
+					switch(opCompra) {
+					case COMPRAR : {
+						System.out.print("\n---Comprar filme---\n"
+								+ "Deseja parcelar?(s/n): ");
+						char op = sc.next().charAt(0);
+						sc.nextLine();
+						System.out.print("Digite o CPF do cliente: ");
+						String idCliente = sc.nextLine();
+						System.out.print("Digite o ID do filme: ");
+						int idFilme = sc.nextInt();
+						sc.nextLine();
+						if(op == 'n' || op == 'N') {
+							System.out.println("Compra à vista!");
+							cadastrarClienteFilme(idFilme, idCliente);
+						}
+					}
+					case ALUGAR : {
+						
+					}
+					}
+				}
 			}
 
 			default:
@@ -319,6 +355,16 @@ public class Program {
 	static CidadeDAO cidadeDao = FabricaDAO.criarCidadeDAO();
 	static EnderecoDAO enderecoDao = FabricaDAO.criarEnderecoDAO();
 	static FilmeDAO filmeDao = FabricaDAO.criarFilmeDAO();
+	static Cliente_FilmeDAO clienteFilmeDao = FabricaDAO.criarClienteFilmeDAO();
+	
+	private static void cadastrarClienteFilme(Integer Filme, String cpf) {
+		Filme filme = buscarFilmePorId(Filme);
+		Cliente cliente = buscarClientePorCPF(cpf);
+		ClienteFilme novoClienteFilme = new ClienteFilme(null, cliente.getCPF(), filme.getId());
+		clienteFilmeDao.inserirClienteComFilme(novoClienteFilme, cliente, filme);
+		System.out.println("\nCliente com filme adicionada! Novo ID = " + novoClienteFilme.getId());
+		System.out.println(novoClienteFilme);
+	}
 
 	private static void cadastrarFilme(String nome, Integer classificacao, Integer ano, Double preco) {
 		Filme novoFilme = new Filme(null, nome, classificacao, ano, preco);
