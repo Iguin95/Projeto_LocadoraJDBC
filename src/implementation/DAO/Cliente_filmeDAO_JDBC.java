@@ -27,39 +27,43 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO {
 		this.conn = conn;
 	}
 
-	
 	@Override
-	public void inserirClienteComFilme(ClienteFilme obj, Cliente cliente, Filme filme) {
+	public void inserirClienteComFilme(ClienteFilme obj, Filme filme, Cliente cliente) {
+		if (filme.getId() == null || cliente.getCPF() == null) {
+			throw new IllegalArgumentException("Filme ou Cliente não podem ser nulos.");
+		}
+
 		PreparedStatement ps = null;
-		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement(
-					"insert into filme_cliente "
+					"insert into filme_cliente " 
 					+ "(idFilme, idCliente) "
-					+ "values "
+					+ "values " 
 					+ "(?, ?) ",
 					Statement.RETURN_GENERATED_KEYS
 					);
 			ps.setInt(1, filme.getId());
-			ps.setString(2,	cliente.getCPF());
-			
+			ps.setString(2, cliente.getCPF());
+
 			int linhasAfetadas = ps.executeUpdate();
-			
-			if(linhasAfetadas > 0) {
-				rs = ps.getGeneratedKeys();
-				if(rs.next()) {
+
+			if (linhasAfetadas > 0) {
+				ResultSet rs = ps.getGeneratedKeys();
+				if (rs.next()) {
 					Integer id = rs.getInt(1);
 					obj.setId(id);
 				}
+				ConexaoDB.FecharResultSet(rs);
+			} else {
+				throw new ExcecaoDataBase("Erro inesperado! Nenhuma linha foi afetada");
 			}
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new ExcecaoDataBase(e.getMessage());
-		}finally {
+		} finally {
 			ConexaoDB.FecharStatement(ps);
-			ConexaoDB.FecharResultSet(rs);
 		}
 	}
-	
+
 	@Override
 	public List<ClienteFilme> encontrarClienteComFilme(String cpf) {
 		PreparedStatement ps = null;
@@ -141,9 +145,11 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = conn.prepareStatement("select cliente.nome, cliente.cpf "
+			ps = conn.prepareStatement(
+					"select cliente.nome, cliente.cpf "
 					+ "from cliente join filme_cliente on cliente.cpf = filme_cliente.idCliente "
-					+ "order by cliente.nome");
+					+ "order by cliente.nome"
+					);
 
 			rs = ps.executeQuery();
 
@@ -170,10 +176,13 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = conn.prepareStatement("select filme.nome_filme, cliente.nome, cliente.cpf "
+			ps = conn.prepareStatement(
+					"select filme.nome_filme, cliente.nome, cliente.cpf "
 					+ "from cliente join filme_cliente on cliente.cpf = filme_cliente.idCliente "
-					+ "join filme on filme.id = filme_cliente.idFilme " + "where filme.id = ? "
-					+ "order by cliente.nome ");
+					+ "join filme on filme.id = filme_cliente.idFilme " 
+					+ "where filme.id = ? "
+					+ "order by cliente.nome "
+					);
 
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
@@ -183,7 +192,7 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO {
 			while (rs.next()) {
 
 				String clienteCpf = rs.getString("cliente.cpf");
-				ClienteFilme clienteFilme = clienteFilmeMap.get(clienteCpf); 
+				ClienteFilme clienteFilme = clienteFilmeMap.get(clienteCpf);
 
 				if (clienteFilme == null) {
 					Cliente cliente = instanciandoCliente(rs);

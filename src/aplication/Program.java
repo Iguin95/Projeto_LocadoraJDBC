@@ -91,21 +91,22 @@ public class Program {
 					}
 				}
 
-				boolean validarCPF = false;
-				String cpf = null;
-				while (!validarCPF) {
-					System.out.print("Insira o CPF: ");
-					cpf = sc.nextLine();
-					if (Cliente.validarCPF(cpf) == true) {
-						if (cpfExistente(cpf) == true) {
-							validarCPF = true;
+					boolean validarCPF = false;
+					String cpf = null;
+					while (!validarCPF) {
+						System.out.print("Insira o CPF: ");
+						cpf = sc.nextLine();
+						if (Cliente.validarCPF(cpf) == true) {
+							if (cpfExistente(cpf) == true) {
+								validarCPF = true;
+							} else {
+								System.out.println("CPF existente!");
+							}
 						} else {
-							System.out.println("CPF existente!");
+							System.out.println("CPF inválido!");
 						}
-					} else {
-						System.out.println("CPF inválido!");
 					}
-				}
+				
 
 				boolean validarNome = false;
 				String nome = null;
@@ -324,8 +325,18 @@ public class Program {
 								+ "Deseja parcelar?(s/n): ");
 						char op = sc.next().charAt(0);
 						sc.nextLine();
+						
 						System.out.print("Digite o CPF do cliente: ");
 						String idCliente = sc.nextLine();
+						boolean validar = false;
+						while(!validar) {
+							if(clienteDao.clienteExistente(idCliente)) {
+								validar = true;
+							}else {
+								System.out.print("CPF inexistente! Digite o CPF novamente: ");
+								idCliente = sc.nextLine();
+							}
+						}
 						System.out.print("Digite o ID do filme: ");
 						int idFilme = sc.nextInt();
 						sc.nextLine();
@@ -359,9 +370,19 @@ public class Program {
 	
 	private static void cadastrarClienteFilme(Integer Filme, String cpf) {
 		Filme filme = buscarFilmePorId(Filme);
+		 if (filme == null) {
+		        System.out.println("Erro: Filme com ID " + Filme + " não encontrado.");
+		        return;  // Sai do método se o filme não for encontrado
+		    }
+		 
 		Cliente cliente = buscarClientePorCPF(cpf);
+		if (cliente == null) {
+	        System.out.println("Erro: Cliente com CPF " + cpf + " não encontrado.");
+	        return;  // Sai do método se o cliente não for encontrado
+	    }
+		
 		ClienteFilme novoClienteFilme = new ClienteFilme(null, cliente.getCPF(), filme.getId());
-		clienteFilmeDao.inserirClienteComFilme(novoClienteFilme, cliente, filme);
+		clienteFilmeDao.inserirClienteComFilme(novoClienteFilme, filme, cliente);
 		System.out.println("\nCliente com filme adicionada! Novo ID = " + novoClienteFilme.getId());
 		System.out.println(novoClienteFilme);
 	}
@@ -387,10 +408,10 @@ public class Program {
 	}
 
 	private static boolean cpfExistente(String cpf) {
-		if (clienteDao.clienteExistente(cpf) != true) {
-			return true;
+		if (clienteDao.clienteExistente(cpf) != true) { //lê-se: "se o cliente não existir (false)"
+			return true; //se o cpf não existir, retorna true para cadastro de novo cpf.
 		} else {
-			return false;
+			return false; //se o cpf existir, retorna false.
 		}
 	}
 
