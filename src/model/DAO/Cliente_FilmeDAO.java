@@ -12,6 +12,6 @@ public interface Cliente_FilmeDAO {
 	List<ClienteFilme> encontrarClienteComFilme(String cpf);
 	Set<Cliente> acharTodosClientesComFilmes();
 	List<ClienteFilme> acharClientesPorFilme(Integer filme);
-	void inserirClienteComFilme(ClienteFilme obj, Filme filme, Cliente cliente);
+	void inserirClienteComFilme(ClienteFilme obj);
 
 }

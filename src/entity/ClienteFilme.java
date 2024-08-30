@@ -33,10 +33,8 @@ public class ClienteFilme implements Serializable{
 		this.idFilme = idFilme;
 	}
 
-	public ClienteFilme(Integer id, String idCliente, Integer idFilme, Filme filme, Cliente cliente) {
+	public ClienteFilme(Integer id, Filme filme, Cliente cliente) {
 		this.id = id;
-		this.idCliente = idCliente;
-		this.idFilme = idFilme;
 		this.filme = filme;
 		this.cliente = cliente;
 	}

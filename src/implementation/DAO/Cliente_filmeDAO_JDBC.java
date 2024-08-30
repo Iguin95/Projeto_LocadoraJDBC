@@ -28,10 +28,7 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO {
 	}
 
 	@Override
-	public void inserirClienteComFilme(ClienteFilme obj, Filme filme, Cliente cliente) {
-		if (filme.getId() == null || cliente.getCPF() == null) {
-			throw new IllegalArgumentException("Filme ou Cliente não podem ser nulos.");
-		}
+	public void inserirClienteComFilme(ClienteFilme obj) {
 
 		PreparedStatement ps = null;
 		try {
@@ -42,8 +39,8 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO {
 					+ "(?, ?) ",
 					Statement.RETURN_GENERATED_KEYS
 					);
-			ps.setInt(1, filme.getId());
-			ps.setString(2, cliente.getCPF());
+			ps.setInt(1, obj.getIdFilme());
+			ps.setString(2, obj.getIdCliente());
 
 			int linhasAfetadas = ps.executeUpdate();
 

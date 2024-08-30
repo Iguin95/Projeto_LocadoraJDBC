@@ -381,8 +381,8 @@ public class Program {
 	        return;  // Sai do método se o cliente não for encontrado
 	    }
 		
-		ClienteFilme novoClienteFilme = new ClienteFilme(null, cliente.getCPF(), filme.getId());
-		clienteFilmeDao.inserirClienteComFilme(novoClienteFilme, filme, cliente);
+		ClienteFilme novoClienteFilme = new ClienteFilme(null, cpf, Filme);
+		clienteFilmeDao.inserirClienteComFilme(novoClienteFilme);
 		System.out.println("\nCliente com filme adicionada! Novo ID = " + novoClienteFilme.getId());
 		System.out.println(novoClienteFilme);
 	}
