@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import servico.ParcelaFilme;
+
 
 //classe associativa
 public class ClienteFilme implements Serializable{
@@ -21,11 +23,20 @@ public class ClienteFilme implements Serializable{
 	
 	private Filme filme;
 	private Cliente cliente;
+	private ParcelaFilme parcelaFilme;
 	
 	List<Cliente> listaClienteFilme = new ArrayList<>();
 	List<Filme> listaFilmeCliente = new ArrayList<>();
+	List<ParcelaFilme> listaParcelaFilme = new ArrayList<>();
 	
 	public ClienteFilme() {	
+	}
+	
+	public ClienteFilme(Integer id, String idCliente, Integer idFilme, ParcelaFilme parcelaFilme) {
+		this.id = id;
+		this.idCliente = idCliente;
+		this.idFilme = idFilme;
+		this.parcelaFilme = parcelaFilme;
 	}
 	
 	public ClienteFilme(Integer id, String idCliente, Integer idFilme, String desejaParcelar) {
@@ -33,12 +44,6 @@ public class ClienteFilme implements Serializable{
 		this.idCliente = idCliente;
 		this.idFilme = idFilme;
 		this.desejaParcelar = desejaParcelar;
-	}
-
-	public ClienteFilme(Integer id, Filme filme, Cliente cliente) {
-		this.id = id;
-		this.filme = filme;
-		this.cliente = cliente;
 	}
 
 
@@ -120,8 +125,16 @@ public class ClienteFilme implements Serializable{
 	public void setListaFilmeCliente(List<Filme> listaFilmeCliente) {
 		this.listaFilmeCliente = listaFilmeCliente;
 	}
-
 	
+		
+	public List<ParcelaFilme> getListaParcelaFilme() {
+		return listaParcelaFilme;
+	}
+
+	public void setListaParcelaFilme(List<ParcelaFilme> listaParcelaFilme) {
+		this.listaParcelaFilme = listaParcelaFilme;
+	}
+
 	public String ClienteComFilmes() {
 		return "Cliente com Filmes: \n" + filme + "\n";
 	}

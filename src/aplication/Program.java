@@ -352,7 +352,7 @@ public class Program {
 						int idFilme = sc.nextInt();
 						sc.nextLine();
 						if(op == 'n' || op == 'N') {
-							System.out.println("Compra à vista!");
+							System.out.println("\n---Compra à vista!---\n");
 							cadastrarClienteFilme(idFilme, idCliente, desejaParcelar);
 						}
 						
@@ -362,40 +362,48 @@ public class Program {
 						cdv = new ContratoDeVenda(filme.getPreco(), agora);
 						
 						if(op == 's' || op == 'S') {
-							System.out.print("De quantos meses deseja parcelar? ");
-							int parcelas = sc.nextInt();
 							System.out.println("Escolha o cartão: \n 1 - Nubank "
 									+ "\n 2 - PicPay \n 3 - Caixa");
 							int op2 = sc.nextInt();
+							sc.nextLine();
+							System.out.print("De quantos meses deseja parcelar? ");
+							int parcelas = sc.nextInt();
+							sc.nextLine();
 							
 							switch (op2) {
 							case 1 : {
 								pdv = new ProcessoDeVenda(new BancoNuBank());
 								pdv.processarContrato(cdv, parcelas);
+								cadastrarClienteFilmeComParcela(idFilme, idCliente, cdv.getParcelas());
 								
 								for (ParcelaFilme p : cdv.getParcelas()) {
 									System.out.println(p);
 								}
+								
 								break;
 							}
 							
 							case 2 : {
 								pdv = new ProcessoDeVenda(new BancoPicPay());
 								pdv.processarContrato(cdv, parcelas);
+								cadastrarClienteFilmeComParcela(idFilme, idCliente, cdv.getParcelas());
 								
 								for (ParcelaFilme p : cdv.getParcelas()) {
 									System.out.println(p);
 								}
+								
 								break;
 							}
 							
 							case 3 : {
 								pdv = new ProcessoDeVenda(new BancoCaixa());
 								pdv.processarContrato(cdv, parcelas);
+								cadastrarClienteFilmeComParcela(idFilme, idCliente, cdv.getParcelas());
 								
 								for (ParcelaFilme p : cdv.getParcelas()) {
 									System.out.println(p);
 								}
+								
 								break;
 							}
 							
@@ -430,6 +438,31 @@ public class Program {
 	static FilmeDAO filmeDao = FabricaDAO.criarFilmeDAO();
 	static Cliente_FilmeDAO clienteFilmeDao = FabricaDAO.criarClienteFilmeDAO();
 	
+	private static void cadastrarClienteFilmeComParcela(Integer Filme, String cpf, List<ParcelaFilme> parcelas) {
+		Filme filme = buscarFilmePorId(Filme);
+		 if (filme == null) {
+		        System.out.println("Erro: Filme com ID " + Filme + " não encontrado.");
+		        return;  
+		    }
+		 
+		Cliente cliente = buscarClientePorCPF(cpf);
+		if (cliente == null) {
+	        System.out.println("Erro: Cliente com CPF " + cpf + " não encontrado.");
+	        return; 
+	    }
+		
+		ClienteFilme novoClienteFilme = null;
+		
+		 for (ParcelaFilme parcela : parcelas) {
+		       novoClienteFilme = new ClienteFilme(null, cpf, Filme, parcela);
+		       clienteFilmeDao.inserirClienteComFilmeComParcela(novoClienteFilme);
+		    }
+		
+		
+		System.out.println("\nCliente com filme adicionado! Novo ID = " + novoClienteFilme.getId());
+	}
+	
+	
 	private static void cadastrarClienteFilme(Integer Filme, String cpf, String desejaParcelar) {
 		Filme filme = buscarFilmePorId(Filme);
 		 if (filme == null) {
@@ -446,7 +479,6 @@ public class Program {
 		ClienteFilme novoClienteFilme = new ClienteFilme(null, cpf, Filme, desejaParcelar);
 		clienteFilmeDao.inserirClienteComFilme(novoClienteFilme);
 		System.out.println("\nCliente com filme adicionado! Novo ID = " + novoClienteFilme.getId());
-		//System.out.println(novoClienteFilme);
 	}
 
 	private static void cadastrarFilme(String nome, Integer classificacao, Integer ano, Double preco) {

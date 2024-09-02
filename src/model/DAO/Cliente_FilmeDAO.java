@@ -13,5 +13,6 @@ public interface Cliente_FilmeDAO {
 	Set<Cliente> acharTodosClientesComFilmes();
 	List<ClienteFilme> acharClientesPorFilme(Integer filme);
 	void inserirClienteComFilme(ClienteFilme obj);
+	void inserirClienteComFilmeComParcela(ClienteFilme obj);
 
 }

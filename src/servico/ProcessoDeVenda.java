@@ -18,8 +18,8 @@ public class ProcessoDeVenda {
 		
 		for(int i = 1; i <= meses; i++) {
 			LocalDate dataVencimento = contrato.getDataAtual().plusMonths(i);
-			double juros = pagamento.juros(valorDividido, i);
-			double valor = valorDividido + juros;
+			Double juros = pagamento.juros(valorDividido, i);
+			Double valor = valorDividido + juros;
 			contrato.getParcelas().add(new ParcelaFilme(dataVencimento, valor));
 		}
 	}

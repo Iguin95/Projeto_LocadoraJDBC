@@ -1,6 +1,8 @@
 package implementation.DAO;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +20,7 @@ import entity.Cliente;
 import entity.ClienteFilme;
 import entity.Filme;
 import model.DAO.Cliente_FilmeDAO;
+import servico.ParcelaFilme;
 
 public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO {
 
@@ -27,9 +30,49 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO {
 		this.conn = conn;
 	}
 
+	
+	@Override
+	public void inserirClienteComFilmeComParcela(ClienteFilme obj) {
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(
+					"insert into filme_cliente " 
+					+ "(idFilme, 'SIM', idCliente, parcela, data_parcela) "
+					+ "values " 
+					+ "(?, ?, ?, ?) ",
+					Statement.RETURN_GENERATED_KEYS
+					);
+			
+			for(ParcelaFilme parcela : obj.getListaParcelaFilme()) {
+				ps.setInt(1, obj.getIdFilme());
+				ps.setString(2, obj.getIdCliente());
+				ps.setBigDecimal(3, BigDecimal.valueOf(parcela.getQuantia()));
+				ps.setDate(4, Date.valueOf(parcela.getDataVencimento()));
+				
+				int linhasAfetadas = ps.executeUpdate();
+
+				if (linhasAfetadas > 0) {
+					ResultSet rs = ps.getGeneratedKeys();
+					if (rs.next()) {
+						Integer id = rs.getInt(1);
+						obj.setId(id);
+					}
+					ConexaoDB.FecharResultSet(rs);
+				} else {
+					throw new ExcecaoDataBase("Erro inesperado! Nenhuma linha foi afetada");
+				}
+			}
+			
+		} catch (SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		} finally {
+			ConexaoDB.FecharStatement(ps);
+		}
+	}
+	
+	
 	@Override
 	public void inserirClienteComFilme(ClienteFilme obj) {
-
 		PreparedStatement ps = null;
 		try {
 			ps = conn.prepareStatement(
