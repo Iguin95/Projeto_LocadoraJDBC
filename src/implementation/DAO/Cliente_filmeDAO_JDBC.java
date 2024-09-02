@@ -34,13 +34,14 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO {
 		try {
 			ps = conn.prepareStatement(
 					"insert into filme_cliente " 
-					+ "(idFilme, idCliente) "
+					+ "(idFilme, idCliente, compra_parcelada) "
 					+ "values " 
-					+ "(?, ?) ",
+					+ "(?, ?, ?) ",
 					Statement.RETURN_GENERATED_KEYS
 					);
 			ps.setInt(1, obj.getIdFilme());
 			ps.setString(2, obj.getIdCliente());
+			ps.setString(3, obj.getDesejaParcelar());
 
 			int linhasAfetadas = ps.executeUpdate();
 

@@ -5,7 +5,7 @@ import java.util.Set;
 
 import entity.Cliente;
 import entity.ClienteFilme;
-import entity.Filme;
+
 
 public interface Cliente_FilmeDAO {
 	

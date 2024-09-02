@@ -17,6 +17,7 @@ public class ClienteFilme implements Serializable{
 	private Integer id;
 	private String idCliente;
 	private Integer idFilme;
+	private String desejaParcelar;
 	
 	private Filme filme;
 	private Cliente cliente;
@@ -27,10 +28,11 @@ public class ClienteFilme implements Serializable{
 	public ClienteFilme() {	
 	}
 	
-	public ClienteFilme(Integer id, String idCliente, Integer idFilme) {
+	public ClienteFilme(Integer id, String idCliente, Integer idFilme, String desejaParcelar) {
 		this.id = id;
 		this.idCliente = idCliente;
 		this.idFilme = idFilme;
+		this.desejaParcelar = desejaParcelar;
 	}
 
 	public ClienteFilme(Integer id, Filme filme, Cliente cliente) {
@@ -88,7 +90,17 @@ public class ClienteFilme implements Serializable{
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+	
+	
+	public String getDesejaParcelar() {
+		return desejaParcelar;
+	}
+	
 
+	public void setDesejaParcelar(String desejaParcelar) {
+		this.desejaParcelar = desejaParcelar;
+	}
+	
 
 	public List<Cliente> getListaClienteFilme() {
 		return listaClienteFilme;

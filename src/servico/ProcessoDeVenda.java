@@ -10,7 +10,6 @@ public class ProcessoDeVenda {
 	}
 
 	public ProcessoDeVenda(Pagamento pagamento) {
-		super();
 		this.pagamento = pagamento;
 	}
 	

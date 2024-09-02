@@ -23,6 +23,12 @@ import model.DAO.EnderecoDAO;
 import model.DAO.EstadoDAO;
 import model.DAO.FabricaDAO;
 import model.DAO.FilmeDAO;
+import servico.BancoCaixa;
+import servico.BancoNuBank;
+import servico.BancoPicPay;
+import servico.ContratoDeVenda;
+import servico.ParcelaFilme;
+import servico.ProcessoDeVenda;
 
 public class Program {
 
@@ -305,6 +311,10 @@ public class Program {
 //------------------------------------------------------------------------------------------			
 			
 			case VENDA_ALUGUEL : {
+				
+				ContratoDeVenda cdv = null;
+				ProcessoDeVenda pdv  = null;
+				
 				final int COMPRAR = 1;
 				final int ALUGAR = 2;
 				final int VOLTAR = 3;
@@ -325,6 +335,7 @@ public class Program {
 								+ "Deseja parcelar?(s/n): ");
 						char op = sc.next().charAt(0);
 						sc.nextLine();
+						String desejaParcelar = "NÃO";
 						
 						System.out.print("Digite o CPF do cliente: ");
 						String idCliente = sc.nextLine();
@@ -342,8 +353,59 @@ public class Program {
 						sc.nextLine();
 						if(op == 'n' || op == 'N') {
 							System.out.println("Compra à vista!");
-							cadastrarClienteFilme(idFilme, idCliente);
+							cadastrarClienteFilme(idFilme, idCliente, desejaParcelar);
 						}
+						
+						Filme filme = buscarFilmePorId(idFilme);
+						LocalDate agora = LocalDate.now();
+						
+						cdv = new ContratoDeVenda(filme.getPreco(), agora);
+						
+						if(op == 's' || op == 'S') {
+							System.out.print("De quantos meses deseja parcelar? ");
+							int parcelas = sc.nextInt();
+							System.out.println("Escolha o cartão: \n 1 - Nubank "
+									+ "\n 2 - PicPay \n 3 - Caixa");
+							int op2 = sc.nextInt();
+							
+							switch (op2) {
+							case 1 : {
+								pdv = new ProcessoDeVenda(new BancoNuBank());
+								pdv.processarContrato(cdv, parcelas);
+								
+								for (ParcelaFilme p : cdv.getParcelas()) {
+									System.out.println(p);
+								}
+								break;
+							}
+							
+							case 2 : {
+								pdv = new ProcessoDeVenda(new BancoPicPay());
+								pdv.processarContrato(cdv, parcelas);
+								
+								for (ParcelaFilme p : cdv.getParcelas()) {
+									System.out.println(p);
+								}
+								break;
+							}
+							
+							case 3 : {
+								pdv = new ProcessoDeVenda(new BancoCaixa());
+								pdv.processarContrato(cdv, parcelas);
+								
+								for (ParcelaFilme p : cdv.getParcelas()) {
+									System.out.println(p);
+								}
+								break;
+							}
+							
+							default:
+								System.out.println("Opção inválida!");
+							}
+							
+							
+						}
+						
 					}
 					case ALUGAR : {
 						
@@ -368,7 +430,7 @@ public class Program {
 	static FilmeDAO filmeDao = FabricaDAO.criarFilmeDAO();
 	static Cliente_FilmeDAO clienteFilmeDao = FabricaDAO.criarClienteFilmeDAO();
 	
-	private static void cadastrarClienteFilme(Integer Filme, String cpf) {
+	private static void cadastrarClienteFilme(Integer Filme, String cpf, String desejaParcelar) {
 		Filme filme = buscarFilmePorId(Filme);
 		 if (filme == null) {
 		        System.out.println("Erro: Filme com ID " + Filme + " não encontrado.");
@@ -381,10 +443,10 @@ public class Program {
 	        return;  // Sai do método se o cliente não for encontrado
 	    }
 		
-		ClienteFilme novoClienteFilme = new ClienteFilme(null, cpf, Filme);
+		ClienteFilme novoClienteFilme = new ClienteFilme(null, cpf, Filme, desejaParcelar);
 		clienteFilmeDao.inserirClienteComFilme(novoClienteFilme);
-		System.out.println("\nCliente com filme adicionada! Novo ID = " + novoClienteFilme.getId());
-		System.out.println(novoClienteFilme);
+		System.out.println("\nCliente com filme adicionado! Novo ID = " + novoClienteFilme.getId());
+		//System.out.println(novoClienteFilme);
 	}
 
 	private static void cadastrarFilme(String nome, Integer classificacao, Integer ano, Double preco) {
