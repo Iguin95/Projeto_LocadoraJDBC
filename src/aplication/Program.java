@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
+import aplication.exception.ExcecaoES;
 import entity.Celular;
 import entity.Cidade;
 import entity.Cliente;
@@ -23,6 +24,7 @@ import model.DAO.EnderecoDAO;
 import model.DAO.EstadoDAO;
 import model.DAO.FabricaDAO;
 import model.DAO.FilmeDAO;
+import servico.AluguelFilme;
 import servico.BancoCaixa;
 import servico.BancoNuBank;
 import servico.BancoPicPay;
@@ -63,12 +65,14 @@ public class Program {
 			System.out.println("--------Menu--------\n");
 			System.out.println(" 1 - Cadastro de cliente;\n " + "2 - Cadastro de filme;\n "
 					+ "3 - Venda ou Aluguel de filme;\n " + "4 - Consultar filme;\n "
-					+ "5 - Consultar cliente ;\n " + "0 - Sair\n");
+					+ "5 - Consultar cliente;\n " + "0 - Sair\n");
 
 			System.out.print("Digite a opção desejada: ");
 			opcaoMenu = sc.nextInt();
 			sc.nextLine();
 			switch (opcaoMenu) {
+			
+//------------------------------------------------------------------------------------------
 
 			case CADASTRAR_CLIENTE: {
 				System.out.println("--Cadastro de Cliente--\n");
@@ -314,6 +318,8 @@ public class Program {
 				
 				ContratoDeVenda cdv = null;
 				ProcessoDeVenda pdv  = null;
+				LocalDate agora = null;
+				Filme filme = null;
 				
 				final int COMPRAR = 1;
 				final int ALUGAR = 2;
@@ -356,8 +362,8 @@ public class Program {
 							cadastrarClienteFilme(idFilme, idCliente, desejaParcelar);
 						}
 						
-						Filme filme = buscarFilmePorId(idFilme);
-						LocalDate agora = LocalDate.now();
+						filme = buscarFilmePorId(idFilme);
+						agora = LocalDate.now();
 						
 						cdv = new ContratoDeVenda(filme.getPreco(), agora);
 						
@@ -409,14 +415,45 @@ public class Program {
 							
 							default:
 								System.out.println("Opção inválida!");
-							}
-							
-							
+							}	
 						}
 						
 					}
 					case ALUGAR : {
+						System.out.print("\n--Alugar filme--\n"
+								+ "Insira o CPF do cliente: ");
+						String cpf = sc.nextLine();
 						
+						System.out.print("Digite o ID do filme para alugar: ");
+						int id = sc.nextInt();
+						sc.nextLine();
+						filme = buscarFilmePorId(id);
+						
+						System.out.print("Por quantos dias deseja alugar?(Máximo 7 dias"
+								+ ",mínimo 2 dias): ");
+						int dias = sc.nextInt();
+						sc.nextLine();
+						
+						while(dias < 2 || dias > 7) {
+							System.out.println("\nEntrada de dias inválida! O aluguel deve ser "
+									+ "entre dois dias e sete dias!\n");
+							System.out.print("Digite novamente os dias que deseja alugar: ");
+							dias = sc.nextInt();
+						}
+						
+						agora = LocalDate.now();
+						
+						cdv = new ContratoDeVenda(filme.getPreco(), agora);
+						pdv = new ProcessoDeVenda();
+						pdv.processarAluguel(cdv, dias);
+						
+						double totalAluguel = 0.0;
+						for(AluguelFilme a : cdv.getAluguel()) {
+							totalAluguel += a.getQuantia();
+							System.out.println(a);
+						}
+						
+						System.out.println("Total do Aluguel: " + String.format("%.2f", totalAluguel));
 					}
 					}
 				}
@@ -430,6 +467,8 @@ public class Program {
 		sc.close();
 	}
 
+//------------------------------------------------------------------------------------------
+	
 	static ClienteDAO clienteDao = FabricaDAO.criarClienteDAO();
 	static CelularDAO celularDao = FabricaDAO.criarCelularDAO();
 	static EstadoDAO estadoDao = FabricaDAO.criarEstadoDAO();
