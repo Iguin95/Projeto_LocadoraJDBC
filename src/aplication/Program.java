@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-import aplication.exception.ExcecaoES;
 import entity.Celular;
 import entity.Cidade;
 import entity.Cliente;
@@ -357,6 +356,16 @@ public class Program {
 						System.out.print("Digite o ID do filme: ");
 						int idFilme = sc.nextInt();
 						sc.nextLine();
+						
+						while(!validar) {
+							if(filmeDao.filmeExistente(idFilme)) {
+								validar = true;
+							}else {
+								System.out.print("Filme inexistente! Digite o filme novamente: ");
+								idFilme = sc.nextInt();
+							}
+						}
+						
 						if(op == 'n' || op == 'N') {
 							System.out.println("\n---Compra à vista!---\n");
 							cadastrarClienteFilme(idFilme, idCliente, desejaParcelar);
@@ -417,17 +426,36 @@ public class Program {
 								System.out.println("Opção inválida!");
 							}	
 						}
-						
+						break;
 					}
 					case ALUGAR : {
 						System.out.print("\n--Alugar filme--\n"
 								+ "Insira o CPF do cliente: ");
-						String cpf = sc.nextLine();
+						String idCliente = sc.nextLine();
+						boolean validar = false;
+						while(!validar) {
+							if(clienteDao.clienteExistente(idCliente)) {
+								validar = true;
+							}else {
+								System.out.print("CPF inexistente! Digite o CPF novamente: ");
+								idCliente = sc.nextLine();
+							}
+						}
 						
 						System.out.print("Digite o ID do filme para alugar: ");
-						int id = sc.nextInt();
+						Integer idFilme = sc.nextInt();
 						sc.nextLine();
-						filme = buscarFilmePorId(id);
+						
+						while(!validar) {
+							if(filmeDao.filmeExistente(idFilme)) {
+								validar = true;
+							}else {
+								System.out.print("Filme inexistente! Digite o filme novamente: ");
+								idFilme = sc.nextInt();
+							}
+						}
+						
+						filme = buscarFilmePorId(idFilme);
 						
 						System.out.print("Por quantos dias deseja alugar?(Máximo 7 dias"
 								+ ",mínimo 2 dias): ");
@@ -453,7 +481,11 @@ public class Program {
 							System.out.println(a);
 						}
 						
+						cadastrarClienteFilmeAluguel(idFilme, idCliente, cdv.getAluguel());
+						
 						System.out.println("Total do Aluguel: " + String.format("%.2f", totalAluguel));
+						
+						break;
 					}
 					}
 				}
@@ -477,19 +509,17 @@ public class Program {
 	static FilmeDAO filmeDao = FabricaDAO.criarFilmeDAO();
 	static Cliente_FilmeDAO clienteFilmeDao = FabricaDAO.criarClienteFilmeDAO();
 	
-	private static void cadastrarClienteFilmeComParcela(Integer Filme, String cpf, List<ParcelaFilme> parcelas) {
-		Filme filme = buscarFilmePorId(Filme);
-		 if (filme == null) {
-		        System.out.println("Erro: Filme com ID " + Filme + " não encontrado.");
-		        return;  
-		    }
-		 
-		Cliente cliente = buscarClientePorCPF(cpf);
-		if (cliente == null) {
-	        System.out.println("Erro: Cliente com CPF " + cpf + " não encontrado.");
-	        return; 
-	    }
+	private static void cadastrarClienteFilmeAluguel(Integer Filme, String cpf, List<AluguelFilme> aluguel) {
+		ClienteFilme novoClienteFilme = null;
 		
+		for(AluguelFilme a : aluguel) {
+			novoClienteFilme = new ClienteFilme(null, cpf, Filme, a);
+			clienteFilmeDao.inserirClienteComFilmeAlugado(novoClienteFilme);
+		}
+		System.out.println("\nAluguel adicionado! ID final = " + novoClienteFilme.getId());
+	}
+	
+	private static void cadastrarClienteFilmeComParcela(Integer Filme, String cpf, List<ParcelaFilme> parcelas) {		
 		ClienteFilme novoClienteFilme = null;
 		
 		 for (ParcelaFilme parcela : parcelas) {
@@ -497,24 +527,11 @@ public class Program {
 		       clienteFilmeDao.inserirClienteComFilmeComParcela(novoClienteFilme);
 		    }
 		
-		
-		System.out.println("\nCliente com filme adicionado! Novo ID = " + novoClienteFilme.getId());
+		System.out.println("\nCliente com filme adicionado! ID final = " + novoClienteFilme.getId());
 	}
 	
 	
-	private static void cadastrarClienteFilme(Integer Filme, String cpf, String desejaParcelar) {
-		Filme filme = buscarFilmePorId(Filme);
-		 if (filme == null) {
-		        System.out.println("Erro: Filme com ID " + Filme + " não encontrado.");
-		        return;  // Sai do método se o filme não for encontrado
-		    }
-		 
-		Cliente cliente = buscarClientePorCPF(cpf);
-		if (cliente == null) {
-	        System.out.println("Erro: Cliente com CPF " + cpf + " não encontrado.");
-	        return;  // Sai do método se o cliente não for encontrado
-	    }
-		
+	private static void cadastrarClienteFilme(Integer Filme, String cpf, String desejaParcelar) {		
 		ClienteFilme novoClienteFilme = new ClienteFilme(null, cpf, Filme, desejaParcelar);
 		clienteFilmeDao.inserirClienteComFilme(novoClienteFilme);
 		System.out.println("\nCliente com filme adicionado! Novo ID = " + novoClienteFilme.getId());

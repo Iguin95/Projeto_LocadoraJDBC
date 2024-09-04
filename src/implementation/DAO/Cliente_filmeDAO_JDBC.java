@@ -20,6 +20,7 @@ import entity.Cliente;
 import entity.ClienteFilme;
 import entity.Filme;
 import model.DAO.Cliente_FilmeDAO;
+import servico.AluguelFilme;
 import servico.ParcelaFilme;
 
 public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO {
@@ -30,6 +31,42 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO {
 		this.conn = conn;
 	}
 
+	
+	@Override
+	public void inserirClienteComFilmeAlugado(ClienteFilme obj) {
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(
+					"insert into cliente_aluguel "
+					+ "(idFilme, idCliente, preco_aluguel, dias_alugados) "
+					+ "values "
+					+ "(?, ?, ?, ?) ",
+					Statement.RETURN_GENERATED_KEYS
+					);
+			
+			for(AluguelFilme aluguel : obj.getListaAluguelFilme()) {
+				ps.setInt(1, obj.getIdFilme());
+				ps.setString(2, obj.getIdCliente());
+				ps.setBigDecimal(3, BigDecimal.valueOf(aluguel.getQuantia()));
+				ps.setDate(4, Date.valueOf(aluguel.getDataVencimento()));
+				
+				int linhasAfetadas = ps.executeUpdate();
+				
+				if(linhasAfetadas > 0) {
+					ResultSet rs = ps.getGeneratedKeys();
+					if(rs.next()) {
+						Integer id = rs.getInt(1);
+						obj.setId(id);
+					}
+					ConexaoDB.FecharResultSet(rs);
+				}
+			}
+		}catch(SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		}finally {
+			ConexaoDB.FecharStatement(ps);
+		}
+	}
 	
 	@Override
 	public void inserirClienteComFilmeComParcela(ClienteFilme obj) {

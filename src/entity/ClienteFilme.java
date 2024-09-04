@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import servico.AluguelFilme;
 import servico.ParcelaFilme;
 
 
@@ -28,8 +29,17 @@ public class ClienteFilme implements Serializable{
 	List<Cliente> listaClienteFilme = new ArrayList<>();
 	List<Filme> listaFilmeCliente = new ArrayList<>();
 	List<ParcelaFilme> listaParcelaFilme;
+	List<AluguelFilme> listaAluguelFilme;
 	
 	public ClienteFilme() {	
+	}
+	
+	public ClienteFilme(Integer id, String idCliente, Integer idFilme, AluguelFilme aluguel) {
+		this.id = id;
+		this.idCliente = idCliente;
+		this.idFilme = idFilme;
+		this.listaAluguelFilme = new ArrayList<>();
+		this.listaAluguelFilme.add(aluguel);
 	}
 	
 	public ClienteFilme(Integer id, String idCliente, Integer idFilme, ParcelaFilme parcelaFilme) {
@@ -140,6 +150,15 @@ public class ClienteFilme implements Serializable{
 		
 	public List<ParcelaFilme> getListaParcelaFilme() {
 		return listaParcelaFilme;
+	}
+	
+	
+	public List<AluguelFilme> getListaAluguelFilme() {
+		return listaAluguelFilme;
+	}
+
+	public void setListaAluguelFilme(List<AluguelFilme> listaAluguelFilme) {
+		this.listaAluguelFilme = listaAluguelFilme;
 	}
 
 	public void setListaParcelaFilme(List<ParcelaFilme> listaParcelaFilme) {

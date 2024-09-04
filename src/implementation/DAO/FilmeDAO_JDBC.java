@@ -58,6 +58,26 @@ public class FilmeDAO_JDBC implements FilmeDAO{
 		}
 		
 	}
+	
+	@Override
+	public boolean filmeExistente(Integer id) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"select 1 from filme " 
+					+ "where filme.id = ?"
+					);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			return rs.next();//se retornar true, quer dizer que o filme ja existe
+		} catch (SQLException e) {
+			throw new ExcecaoDataBase(e.getMessage());
+		} finally {
+			ConexaoDB.FecharStatement(ps);
+			ConexaoDB.FecharResultSet(rs);
+		}
+	}
 
 	@Override
 	public void atualizar(Filme obj) {

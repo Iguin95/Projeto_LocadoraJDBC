@@ -13,5 +13,6 @@ public interface FilmeDAO {
 	Filme encontrarPorIdParaAtualizar(Integer id);
 	List<Filme> buscarPorNome(String nome);
 	List<Filme> acharTodos();
+	boolean filmeExistente(Integer id);
 
 }
