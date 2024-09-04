@@ -27,7 +27,7 @@ public class ClienteFilme implements Serializable{
 	
 	List<Cliente> listaClienteFilme = new ArrayList<>();
 	List<Filme> listaFilmeCliente = new ArrayList<>();
-	List<ParcelaFilme> listaParcelaFilme = new ArrayList<>();
+	List<ParcelaFilme> listaParcelaFilme;
 	
 	public ClienteFilme() {	
 	}
@@ -36,7 +36,10 @@ public class ClienteFilme implements Serializable{
 		this.id = id;
 		this.idCliente = idCliente;
 		this.idFilme = idFilme;
-		this.parcelaFilme = parcelaFilme;
+		this.listaParcelaFilme = new ArrayList<>(); 
+		this.listaParcelaFilme.add(parcelaFilme); 
+		/*Se a lista não for inicializada, a chamada ao método getListaParcelaFilme() no método 
+		 * inserirClienteComFilmeComParcela retornará null, e nada será inserido no banco.*/
 	}
 	
 	public ClienteFilme(Integer id, String idCliente, Integer idFilme, String desejaParcelar) {
@@ -116,6 +119,14 @@ public class ClienteFilme implements Serializable{
 		this.listaClienteFilme = listaClienteFilme;
 	}
 
+
+	public ParcelaFilme getParcelaFilme() {
+		return parcelaFilme;
+	}
+
+	public void setParcelaFilme(ParcelaFilme parcelaFilme) {
+		this.parcelaFilme = parcelaFilme;
+	}
 
 	public List<Filme> getListaFilmeCliente() {
 		return listaFilmeCliente;

@@ -37,7 +37,7 @@ public class Cliente_filmeDAO_JDBC implements Cliente_FilmeDAO {
 		try {
 			ps = conn.prepareStatement(
 					"insert into filme_cliente " 
-					+ "(idFilme, 'SIM', idCliente, parcela, data_parcela) "
+					+ "(idFilme, idCliente, parcela, data_parcela) "
 					+ "values " 
 					+ "(?, ?, ?, ?) ",
 					Statement.RETURN_GENERATED_KEYS
