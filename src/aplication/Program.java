@@ -38,10 +38,12 @@ public class Program {
 	private static final int VENDA_ALUGUEL = 3;
 	private static final int CONSULTAR_FILME = 4;
 	private static final int CONSULTAR_CLIENTE = 5;
+	private static final int CONSULTAR_UF_CID = 6;
 	private static final int SAIR = 0;
 
 	// fazer opções para consultar cidade, estado, celular, endereço e voltar ao
-	// menu principal
+	// menu principal. Colocar 'delete e update' nos menus de cliente, filme, estado/cidade
+	//e criar um menu de celular com inserir, pesquisar, listar todos, update e deletar
 
 	public static void main(String[] args) {
 
@@ -62,9 +64,13 @@ public class Program {
 
 		while (opcaoMenu != SAIR) {
 			System.out.println("--------Menu--------\n");
-			System.out.println(" 1 - Cadastro de cliente;\n " + "2 - Cadastro de filme;\n "
-					+ "3 - Venda ou Aluguel de filme;\n " + "4 - Consultar filme;\n "
-					+ "5 - Consultar cliente;\n " + "0 - Sair\n");
+			System.out.println(" 1 - Cadastro de cliente;\n " 
+					+ "2 - Cadastro de filme;\n "
+					+ "3 - Venda ou Aluguel de filme;\n " 
+					+ "4 - Consultar filme;\n "
+					+ "5 - Consultar cliente;\n "
+					+ "6 - Consultar Cidade ou Estado;\n " 
+					+ "0 - Sair\n");
 
 			System.out.print("Digite a opção desejada: ");
 			opcaoMenu = sc.nextInt();
@@ -264,6 +270,7 @@ public class Program {
 					}
 					}
 				}
+				break;
 			}
 			
 //------------------------------------------------------------------------------------------
@@ -306,9 +313,9 @@ public class Program {
 						listarTodosClientes();
 						break;
 					}
-					}
-						
+					}	
 				}
+				break;
 			}
 			
 //------------------------------------------------------------------------------------------			
@@ -357,6 +364,7 @@ public class Program {
 						int idFilme = sc.nextInt();
 						sc.nextLine();
 						
+						validar = false;
 						while(!validar) {
 							if(filmeDao.filmeExistente(idFilme)) {
 								validar = true;
@@ -446,6 +454,7 @@ public class Program {
 						Integer idFilme = sc.nextInt();
 						sc.nextLine();
 						
+						validar = false;
 						while(!validar) {
 							if(filmeDao.filmeExistente(idFilme)) {
 								validar = true;
@@ -489,6 +498,11 @@ public class Program {
 					}
 					}
 				}
+				
+//------------------------------------------------------------------------------------------			
+				
+			} case CONSULTAR_UF_CID : {
+				
 			}
 
 			default:
@@ -620,7 +634,7 @@ public class Program {
 	private static List<Filme> buscarFilmePorNome(String nome) {
 		List<Filme> filmes = filmeDao.buscarPorNome(nome);
 		if(filmes.isEmpty()) {
-			System.out.println("Nenhum cliente encontrado com o nome: " + nome);
+			System.out.println("Nenhum filme encontrado com o nome: " + nome);
 		}else {
 			for (Filme filme : filmes) {
 				System.out.println(filme);
@@ -633,7 +647,7 @@ public class Program {
 	private static List<Filme> listarTodosFilmes() {
 		List<Filme> filmes = filmeDao.acharTodos();
 		for (Filme filme : filmes) {
-			System.out.println(filme.getNome() + "-" + filme.getClassificacao());
+			System.out.println(filme.getNome() + " - " + "Classificação Indicativa: " + filme.getClassificacao() + " anos");
 		}
 		return filmes;
 	}
